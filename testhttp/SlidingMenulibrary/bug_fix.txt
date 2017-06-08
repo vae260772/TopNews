@@ -1,0 +1,64 @@
+https://github.com/jfeinstein10/SlidingMenu/issues/446
+
+If I use the SlidingMenu together with ActionBarSherlock (maybe unrelated) and with this settings:
+
+SlidingMenu sm = getSlidingMenu();
+sm.setShadowWidthRes(R.dimen.shadow_width);
+sm.setShadowDrawable(R.drawable.shadow);
+sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
+sm.setFadeDegree(0.35f);
+sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+sm.setTouchModeBehind(SlidingMenu.TOUCHMODE_FULLSCREEN);
+I cannot use the view behind which has the effect that I cannot react on onListItemClick(...) in my ListFragment after days of research I found out that there is a bug in the CustomViewAbove.
+
+My primary fix is to change a break in onInterceptTouchEvent() to return mQuickReturn;. So the ACTION_DOWN event code will look like this:
+
+case MotionEvent.ACTION_DOWN:
+    int index = MotionEventCompat.getActionIndex(ev);
+    mActivePointerId = MotionEventCompat.getPointerId(ev, index);
+    if (mActivePointerId == INVALID_POINTER)
+        break;
+    mLastMotionX = mInitialMotionX = MotionEventCompat.getX(ev, index);
+    mLastMotionY = MotionEventCompat.getY(ev, index);
+    if (thisTouchAllowed(ev)) {
+        mIsBeingDragged = false;
+        mIsUnableToDrag = false;
+        if (isMenuOpen() && mViewBehind.menuTouchInQuickReturn(mContent, mCurItem, ev.getX() + mScrollX)) {
+            mQuickReturn = true;
+        }
+    } else {
+        mIsUnableToDrag = true;
+    }
+    return mQuickReturn;
+Update: And also the onTouchEvent you need to change the case MotionEvent.ACTION_DOWN. There you need to replace the break with another return mQuickReturn. The case will look like that:
+
+case MotionEvent.ACTION_DOWN:
+    /*
+     * If being flinged and user touches, stop the fling. isFinished
+     * will be false if being flinged.
+     */
+    completeScroll();
+
+    // Remember where the motion event started
+    int index = MotionEventCompat.getActionIndex(ev);
+    mActivePointerId = MotionEventCompat.getPointerId(ev, index);
+    mLastMotionX = mInitialMotionX = ev.getX();
+    return mQuickReturn;
+</update>
+
+I also removed the setInternalPageChangeListener in initCustomViewAbove(). (The reason comes later.)
+
+In the CustomViewBehind I changed the code of the functions onInterceptTouchEvent and onTouchEvent to use the code from the CustomViewAbove:
+
+@Override
+public boolean onInterceptTouchEvent(MotionEvent e) {
+    return mViewAbove.onInterceptTouchEvent(e);
+}
+
+@Override
+public boolean onTouchEvent(MotionEvent e) {
+    return mViewAbove.onTouchEvent(e);
+}
+Now the part with the ChildrenEnabled is not anymore used and the function setChildrenEnabled and the member mChildrenEnabled can be removed.
+
+Hopfully this will help others. By the way I would like to make a PushRequest but I don't know how to make that.

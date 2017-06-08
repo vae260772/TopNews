@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/list_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/textcolor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:text="歌曲：不能说的秘密" />
+
+        <TextView
+            android:id="@+id/album"
+            style="@style/textcolor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            android:text="专辑：不能说的秘密" />
+
+
+        <TextView
+            android:id="@+id/singer"
+            style="@style/textcolor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            android:text="歌手：周杰伦" />
+
+        <TextView
+            android:id="@+id/time"
+            style="@style/textcolor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            android:text="时长：4:30" />
+
+        <TextView
+        android:id="@+id/type"
+        style="@style/textcolor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
+        android:text="格式：audio/mp4" />
+
+        <TextView
+            android:id="@+id/size"
+            style="@style/textcolor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            android:text="大小：4.5MB" />
+        <TextView
+            android:id="@+id/path"
+            style="@style/textcolor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            android:text="路径：/storage/emulated/0/KuwoMusic/music/星座书上-许嵩-461320.aac" />
+    </LinearLayout>
+</LinearLayout>

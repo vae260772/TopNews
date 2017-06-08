@@ -1,0 +1,77 @@
+<resources>
+    <string name="hello">Hello World, PreferenceActivityDemoActivity!</string>
+    <string name="cancel">取消</string>
+    <string name="text">阅读</string>
+    <string name="setting">设置</string>
+    <string name="update">更新</string>
+    <string name="auto_update_switch_title">自动更新</string>
+    <string name="auto_update_setting">自动更新设置</string>
+    <string name="auto_update_switch_summary_on">开启自动更新</string>
+    <string name="auto_update_switch_summary_off">关闭自动更新</string>
+    <string name="auto_update_frequency_title">更新频率</string>
+    <string name="auto_update_frequency_summary">设置更新周期</string>
+
+    <string name="isneilflag">是否匿名登录</string>
+    <string name="username">帐号</string>
+    <string name="password">密码</string>
+    <string name="username_summary">提供您帐号</string>
+    <string name="password_summary">提供您密码</string>
+
+    <string name="viewbgcolor_title">背景</string>
+    <string name="viewbgcolor_summary">设置背景颜色</string>
+    <string name="viewbgcolor_dialog">背景</string>
+    <string name="viewbgcolor_key">viewbgcolor_key</string>
+
+
+
+    <string name="update_key">update_key</string>
+    <string name="auto_update_frequency_key">auto_update_frequency_key</string>
+    <string name="isneilflag_key">isneilflag_key</string>
+    <!--<string name="username_key">username_key</string>-->
+    <!--<string name="password_key">password_key</string>-->
+
+    <string name="app_name">八卦头条</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Phone Number</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="textstr">1)Activity+fragment的 数据传递，fragment的setArguments/getArguments
+        \r\n2)viewpager+fragment的结合使用，包括fragment的setOffscreenPageLimit来设置缓存数据页面状态，fragment动态添加/删除
+添加可以选择支持的分类，这些分类是由服务器提供的，支持多选；
+删除可以选择除当前界面的其他fragment，支持多选
+\r\n3)actionbar的使用，其中涉及到sdk api的版本、是否兼容低版本的手机问题、Android.app.ActionBar和android.support.v7.widget.ActionBar2种包对应的
+样式theme设置、bar中设置menu菜单点击问题等
+\r\n4)顶部切换的导航栏，使用第三方库。viewpager指示器：ViewPagerIndicator-library、
+滚动的banner使用了cn.bingoogolapple.bgabanner.BGABanner
+，其中banner中添加的网络图片加载使用了com.bumptech.glide.Glide图片处理框架
+\r\n5)fragment中主页使用recycleview显示
+下拉刷新的实现使用了第三方com.handmark.pulltorefresh.library.PullToRefreshBase，
+但是由于第三方不支持recycleview显示数据，所以在第三方的代码基础上，扩展了刷新功能，支持recycleview的瀑布流显示（后来觉得瀑布流显示比较丑，又修改为gridview显示）
+\r\n6)新闻数据使用了
+https://www.juhe.cn/docs/api/id/235
+聚合数据新闻头条，并且在首次启动应用时会自动从服务器获取数据，
+解析服务器返回的json数据并将数据保存在android自带的sqlite数据库中，
+之后用户可以自己刷新加载最新新闻，如果断开网络可以加载已经缓存的数据
+\r\n7)RecyclerView.Adapter涉及到item重用，避免重绘导致内存泄漏
+item中涉及 com.nostra13.universalimageloader.core.ImageLoader 图片显示，以及长按点击收藏、在浏览器打开、分享功能
+\r\n8)向右侧滑弹出menu。使用了SlidingMenu控件实现左侧滑动
+\r\n9)验证码登录实现。 登录验证码这个使用的三方支持 www.mob.com 提供的sdk集成
+\r\n10)查看收藏以及搜索。在actionbar中实现和用户交互，界面响应
+\r\n11)边听音乐边浏览新闻。通过android sdk提供的mediaplayer结合service实现播放手机内存存储的音乐，包括音乐的暂停/播放，设置播放模式等功能，相当于内嵌了一个小的音乐播放器
+\r\n12)网络监听。使用了动态广播监听器来对网络是否可用进行实时响应并处理
+android.net.conn.CONNECTIVITY_CHANGE，更新UI界面
+    </string>
+</resources>

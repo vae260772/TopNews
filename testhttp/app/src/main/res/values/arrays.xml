@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="auto_frequency_name">
+        <item>3分钟</item>
+        <item>5分钟</item>
+        <item>10分钟</item>
+        <item>30分钟</item>
+    </string-array>
+
+    <string-array name="auto_frequency_value">
+        <item>3</item>
+        <item>5</item>
+        <item>10</item>
+        <item>30</item>
+    </string-array>
+
+    <string-array name="color_name">
+        <item>黑色</item>
+        <item>褐色</item>
+        <item>灰色</item>
+    </string-array>
+
+    <string-array name="color_value">
+        <item>black</item>
+        <item>brown</item>
+        <item>gary</item>
+    </string-array>
+</resources>

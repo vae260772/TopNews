@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "E:\\testhttp\\library\\build\\intermediates\\res\\merged\\release\\drawable-mdpi-v4\\default_ptr_rotate.png",
+        "source": "E:\\testhttp\\library\\src\\main\\res\\drawable-mdpi\\default_ptr_rotate.png"
+    },
+    {
+        "merged": "E:\\testhttp\\library\\build\\intermediates\\res\\merged\\release\\drawable-mdpi-v4\\default_ptr_flip.png",
+        "source": "E:\\testhttp\\library\\src\\main\\res\\drawable-mdpi\\default_ptr_flip.png"
+    },
+    {
+        "merged": "E:\\testhttp\\library\\build\\intermediates\\res\\merged\\release\\drawable-mdpi-v4\\indicator_arrow.png",
+        "source": "E:\\testhttp\\library\\src\\main\\res\\drawable-mdpi\\indicator_arrow.png"
+    }
+]

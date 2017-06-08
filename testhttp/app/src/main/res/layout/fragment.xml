@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="头条"
+        android:visibility="gone" />
+
+    <cn.bingoogolapple.bgabanner.BGABanner
+        android:id="@+id/banner"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:banner_indicatorGravity="bottom|right"
+        app:banner_pageChangeDuration="1500"
+        app:banner_placeholderDrawable="@drawable/holder"
+        app:banner_tipTextSize="12sp"
+        app:banner_transitionEffect="accordion" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="3dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.handmark.pulltorefresh.library.PullToRefreshGridView
+                xmlns:ptr="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/listView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:fadingEdge="none"
+                android:fadingEdgeLength="0dp"
+                android:horizontalSpacing="8dp"
+                android:numColumns="2"
+                android:overScrollMode="never"
+                android:verticalSpacing="8dp"
+                ptr:ptrShowIndicator="false"
+                ptr:ptrHeaderTextColor="#ffffff"
+                ptr:ptrHeaderSubTextColor="#ffffff"/>
+
+            <TextView
+                android:id="@+id/empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="暂时没有新闻\n刷新试试~"
+                android:textSize="40dp" />
+        </FrameLayout>
+    </LinearLayout>
+</LinearLayout>

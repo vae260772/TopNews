@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/favoritell"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:clickable="true"
+    android:orientation="vertical">
+
+    <!--<android.widget.SearchView-->
+    <!--android:id="@+id/searchview"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@color/mainColor"-->
+    <!--/>-->
+
+    <FrameLayout
+        android:id="@+id/favoritefl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="3dp">
+
+        <com.handmark.pulltorefresh.library.PullToRefreshListView xmlns:ptr="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/favorite_listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:divider="@null"
+            ptr:ptrHeaderSubTextColor="#ffffff"
+            ptr:ptrHeaderTextColor="#ffffff" />
+
+        <TextView
+            android:id="@+id/empty_favorite"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="暂未收藏新闻~"
+            android:textColor="@android:color/white"
+            android:textSize="40dp" />
+    </FrameLayout>
+</LinearLayout>

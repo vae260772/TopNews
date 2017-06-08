@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/setting">
+    <PreferenceCategory android:title="@string/update">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/update_key"
+            android:summary="@string/auto_update_setting"
+            android:summaryOff="@string/auto_update_switch_summary_off"
+            android:summaryOn="@string/auto_update_switch_summary_on"
+            android:title="@string/auto_update_switch_title" />
+        <ListPreference
+            android:defaultValue="3"
+            android:dependency="@string/update_key"
+            android:dialogTitle="@string/auto_update_frequency_title"
+            android:entries="@array/auto_frequency_name"
+            android:entryValues="@array/auto_frequency_value"
+            android:key="@string/auto_update_frequency_key"
+            android:negativeButtonText="@string/cancel"
+            android:summary="@string/auto_update_frequency_summary"
+            android:title="@string/auto_update_frequency_title" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/text">
+        <ListPreference
+            android:defaultValue="black"
+            android:dialogTitle="@string/viewbgcolor_dialog"
+            android:entries="@array/color_name"
+            android:entryValues="@array/color_value"
+            android:key="@string/viewbgcolor_key"
+            android:negativeButtonText="@string/cancel"
+            android:summary="@string/viewbgcolor_summary"
+            android:title="@string/viewbgcolor_title" />
+
+        <!--<CheckBoxPreference-->
+        <!--android:disableDependentsState="true"-->
+        <!--android:key="@string/isneilflag_key"-->
+        <!--android:title="@string/isneilflag" />-->
+        <!--<EditTextPreference-->
+        <!--android:dependency="@string/isneilflag_key"-->
+        <!--android:key="@string/username_key"-->
+        <!--android:summary="@string/username_summary"-->
+        <!--android:title="@string/username" />-->
+        <!--<EditTextPreference-->
+        <!--android:dependency="@string/isneilflag_key"-->
+        <!--android:key="@string/password_key"-->
+        <!--android:summary="@string/password_summary"-->
+        <!--android:title="@string/password" />-->
+    </PreferenceCategory>
+</PreferenceScreen>
