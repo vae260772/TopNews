@@ -1,10 +1,11 @@
 package com.example.lihui20.testhttp.service;
 
-import com.squareup.okhttp.ResponseBody;
+import com.example.lihui20.testhttp.model.Data;
+
+import java.util.List;
 
 import retrofit.Call;
 import retrofit.http.POST;
-import retrofit.http.Path;
 import retrofit.http.Query;
 
 /**
@@ -13,5 +14,5 @@ import retrofit.http.Query;
 public interface  HttpService {
 
     @POST("toutiao/index")
-    Call<ResponseBody> getData(@Query("type") String type,@Query("key") String key);
+    Call<List<Data>> getData(@Query("type") String type, @Query("key") String key);
 }

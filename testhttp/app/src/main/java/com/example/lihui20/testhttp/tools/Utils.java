@@ -32,17 +32,20 @@ import com.example.lihui20.testhttp.R;
 import com.example.lihui20.testhttp.activity.WebViewActivity;
 import com.example.lihui20.testhttp.adapter.MusicAdapter;
 import com.example.lihui20.testhttp.adapter.NewsAdapter;
-import com.example.lihui20.testhttp.customview.PullToRefreshRecyclerView;
 import com.example.lihui20.testhttp.database.DBUtils;
 import com.example.lihui20.testhttp.interface2.CustomOnclick;
 import com.example.lihui20.testhttp.model.Data;
 import com.example.lihui20.testhttp.model.Music;
 import com.example.lihui20.testhttp.service.HttpService;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
+import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.ResponseBody;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,7 +56,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import retrofit.Callback;
-import retrofit.GsonConverterFactory;
+import retrofit.Converter;
 import retrofit.Response;
 import retrofit.Retrofit;
 
@@ -192,78 +195,125 @@ public class Utils implements Serializable {
         return (dipValue * scale + 0.5f);
     }
 
-    //PullToRefreshRecyclerView
-    public static List<Data> getResult(final Context context, final String type,
-                                       final PullToRefreshRecyclerView pullToRefreshRecyclerView,
-                                       final List<Data> list,
-                                       final TextView empty, final Handler mHandler) {
-        Log.d("lihui", "List<Data> list---" + list);
-        //1
-        Retrofit retrofit = new Retrofit.Builder().
-                baseUrl("http://v.juhe.cn/").
-                addConverterFactory(GsonConverterFactory.create()).build();
-        //2
-        HttpService myService = retrofit.create(HttpService.class);
-        //3
-        retrofit.Call<ResponseBody> call = myService.getData(type, "9f3097f4cbe47e8abb01ca3b92e49cda");
-        //4
-        call.enqueue(new Callback<ResponseBody>() {
+    static class CustomConverterFactory extends Converter.Factory {
+        static CustomConverterFactory factory;
 
-            @Override
-            public void onResponse(Response<ResponseBody> response, Retrofit retrofit) {
-                Log.d("lihui", "123onResponse");
-                try {
-                    ResponseBody httpResult = response.body();
-                    //原始数据下手
-                    String result = httpResult.string();
-                    org.json.JSONObject jsonObject = new org.json.JSONObject(result);
-                    String reason = jsonObject.getString("reason");
-                    ToastUtils.setToastText(context, reason);
-                    String result2 = jsonObject.getString("result");
-                    org.json.JSONObject jsonObject2 = new org.json.JSONObject(result2);
-                    String stat = jsonObject2.getString("stat");
-                    String data = jsonObject2.getString("data");
-                    org.json.JSONArray jsonArray2 = new org.json.JSONArray(data);
-                    list.clear();
-                    for (int i = 0; i < jsonArray2.length(); i++) {
-                        //获取每一个JsonObject对象
-                        org.json.JSONObject myjObject = jsonArray2.getJSONObject(i);
-                        if (myjObject != null) {
-                            Data data1 = new Data(myjObject);
-                            Log.d("lihui", "Fragment onResponse getUniquekey---" + data1.getUniquekey());
-                            Log.d("lihui", "Fragment onResponse data---" + data1);
-                            list.add(data1);
-                        }
-                    }
-                    if (list != null && list.size() > 0 && mHandler != null) {
-                        Message msg = mHandler.obtainMessage();
-                        msg.what = 0;
-                        msg.obj = list;
-                        mHandler.sendMessage(msg);
-                        empty.setVisibility(View.GONE);
-                        cacheMap.put(type, list);
-                    }
-                    Log.d("lihui", "159 list---" + list);
+        public Converter<ResponseBody, ?> fromResponseBody(Type type, Annotation[] annotations) {
+            Log.d("CustomConverterFactory", "type---" + type);
+            return new UserResponseConverter(type);
+        }
 
-                } catch (Exception e) {
-                    Log.d("lihui", "114e---" + e.getMessage());
-                    pullToRefreshRecyclerView.onRefreshComplete();
-                }
+        public Converter<?, RequestBody> toRequestBody(Type type, Annotation[] annotations) {
+            return null;
+        }
+
+        public static CustomConverterFactory create() {
+            if (factory == null) {
+                factory = new CustomConverterFactory();
             }
-
-            @Override
-            public void onFailure(Throwable t) {
-                Log.d("lihui", "165t:" + t.getMessage());
-                t.printStackTrace();
-                Message msg = mHandler.obtainMessage();
-                msg.what = 1;
-                msg.obj = type;
-                mHandler.sendMessage(msg);
-            }
-
-        });
-        return list;
+            return factory;
+        }
     }
+
+    public static class UserResponseConverter<T> implements Converter<ResponseBody, T> {
+        private Type type;
+
+        public UserResponseConverter(Type type) {
+            this.type = type;
+        }
+
+        @Override
+        public T convert(ResponseBody responseBody) throws IOException {
+            List<Data> list = new ArrayList<>();
+            //原始数据下手
+            String result = responseBody.string();
+            //构造1
+            try {
+                org.json.JSONObject jsonObject = null;
+                jsonObject = new org.json.JSONObject(result);
+                String reason = jsonObject.getString("reason");
+                //  ToastUtils.setToastText(context, reason);
+                String result2 = jsonObject.getString("result");
+                //构造2
+                org.json.JSONObject jsonObject2 = new org.json.JSONObject(result2);
+                String stat = jsonObject2.getString("stat");
+                String data = jsonObject2.getString("data");
+                //构造3
+                org.json.JSONArray jsonArray2 = new org.json.JSONArray(data);
+                for (int i = 0; i < jsonArray2.length(); i++) {
+                    //获取每一个JsonObject对象
+                    org.json.JSONObject myjObject = jsonArray2.getJSONObject(i);
+                    if (myjObject != null) {
+                        Data data1 = new Data(myjObject);
+                        Log.d("lihui", "Fragment onResponse getUniquekey---" + data1.getUniquekey());
+                        Log.d("lihui", "Fragment onResponse data---" + data1);
+                        list.add(data1);
+                    }
+                }
+                Log.d("CustomConverterFactory", "list---" + list);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return (T) list;
+        }
+    }
+
+    //PullToRefreshRecyclerView
+//    public static List<Data> getResult(final Context context, final String type,
+//                                       final PullToRefreshRecyclerView pullToRefreshRecyclerView,
+//                                       final List<Data> list,
+//                                       final TextView empty, final Handler mHandler) {
+//        Log.d("lihui", "List<Data> list---" + list);
+//        //1
+//        Retrofit retrofit = new Retrofit.Builder().
+//                baseUrl("http://v.juhe.cn/").
+//                addConverterFactory(new CustomConverterFactory()).
+//                build();
+//        //2
+//        HttpService myService = retrofit.create(HttpService.class);
+//        //3
+//        retrofit.Call<List<Data>> call = myService.getData(type, "9f3097f4cbe47e8abb01ca3b92e49cda");
+//        //4
+//        call.enqueue(new Callback<List<Data>>() {
+//
+//            @Override
+//            public void onResponse(Response<List<Data>> response, Retrofit retrofit) {
+//                Log.d("lihui", "123onResponse");
+//                try {
+//                    List<Data> dataList = response.body();
+//                    Utils.resetList(list, dataList);//交换数据
+//                    Log.d("CustomConverterFactory", "  Utils.resetList(list, dataList)---" + list);
+//
+//                    if (list != null && list.size() > 0 && mHandler != null) {
+//                        Message msg = mHandler.obtainMessage();
+//                        msg.what = 0;
+//                        msg.obj = list;
+//                        mHandler.sendMessage(msg);
+//                        empty.setVisibility(View.GONE);
+//                        cacheMap.put(type, list);
+//                    }
+//                    Log.d("lihui", "159 list---" + list);
+//
+//                } catch (Exception e) {
+//                    Log.d("lihui", "114e---" + e.getMessage());
+//                    pullToRefreshRecyclerView.onRefreshComplete();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Throwable t) {
+//                Log.d("lihui", "165t:" + t.getMessage());
+//                t.printStackTrace();
+//                Message msg = mHandler.obtainMessage();
+//                msg.what = 1;
+//                msg.obj = type;
+//                mHandler.sendMessage(msg);
+//            }
+//
+//        });
+//        return list;
+//    }
 
     //PullToRefreshGridView
     public static List<Data> getResult(final Context context, final String type,
@@ -275,45 +325,23 @@ public class Utils implements Serializable {
 
         Retrofit retrofit = new Retrofit.Builder().
                 baseUrl("http://v.juhe.cn/").
-                addConverterFactory(GsonConverterFactory.create()).build();
+                addConverterFactory(CustomConverterFactory.create()).build();
 
         //2
         HttpService myService = retrofit.create(HttpService.class);
         //3
-        retrofit.Call<ResponseBody> call = myService.getData(type, "9f3097f4cbe47e8abb01ca3b92e49cda");
+        retrofit.Call<List<Data>> call = myService.getData(type, "9f3097f4cbe47e8abb01ca3b92e49cda");
         //4
-        call.enqueue(new Callback<ResponseBody>() {
+        call.enqueue(new Callback<List<Data>>() {
 
             @Override
-            public void onResponse(Response<ResponseBody> response, Retrofit retrofit) {
+            public void onResponse(Response<List<Data>> response, Retrofit retrofit) {
                 Log.d("lihui", "123onResponse");
                 try {
-                    ResponseBody httpResult = response.body();
-                    //原始数据下手
-                    String result = httpResult.string();
-                    org.json.JSONObject jsonObject = new org.json.JSONObject(result);
-                    String reason = jsonObject.getString("reason");
-                    ToastUtils.setToastText(context, reason);
-                    String result2 = jsonObject.getString("result");
-                    //Log.d("lihui", "Fragment onResponse reason---" + reason);
-                    //Log.d("lihui", "Fragment onResponse result---" + result2);
-                    org.json.JSONObject jsonObject2 = new org.json.JSONObject(result2);
-                    String stat = jsonObject2.getString("stat");
-                    //Log.d("lihui", "Fragment onResponse stat---" + stat);
-                    String data = jsonObject2.getString("data");
-                    //Log.d("lihui", "Fragment onResponse data---" + data);
-                    org.json.JSONArray jsonArray2 = new org.json.JSONArray(data);
-                    list.clear();
-                    for (int i = 0; i < jsonArray2.length(); i++) {
-                        //获取每一个JsonObject对象
-                        org.json.JSONObject myjObject = jsonArray2.getJSONObject(i);
-                        if (myjObject != null) {
-                            Data data1 = new Data(myjObject);
-                            Log.d("lihui", "Fragment onResponse getUniquekey---" + data1.getUniquekey());
-                            Log.d("lihui", "Fragment onResponse data---" + data1);
-                            list.add(data1);
-                        }
-                    }
+                    List<Data> dataList = response.body();
+                    Utils.resetList(list, dataList);//交换数据
+                    Log.d("CustomConverterFactory", "  Utils.resetList(list, dataList)---" + list);
+
                     if (list != null && list.size() > 0 && mHandler != null) {
                         Message msg = mHandler.obtainMessage();
                         msg.what = 0;
@@ -326,9 +354,7 @@ public class Utils implements Serializable {
 
                 } catch (Exception e) {
                     Log.d("lihui", "114e---" + e.getMessage());
-                    if (pullToRefreshGridView != null) {
-                        pullToRefreshGridView.onRefreshComplete();
-                    }
+                    pullToRefreshGridView.onRefreshComplete();
                 }
             }
 
@@ -392,10 +418,11 @@ public class Utils implements Serializable {
 
 
     public static void resetList(List resultList, List newList) {
-        if (resultList != null) {
-            resultList.clear();
-        }
+
         if (newList != null && newList.size() > 0) {
+            if (resultList != null) {
+                resultList.clear();
+            }
             for (int i = 0; i < newList.size(); i++) {
                 resultList.add(newList.get(i));
             }
