@@ -38,7 +38,6 @@ import com.example.lihui20.testhttp.interface2.CustomOnclick;
 import com.example.lihui20.testhttp.model.Data;
 import com.example.lihui20.testhttp.model.Music;
 import com.example.lihui20.testhttp.service.HttpService;
-import com.example.lihui20.testhttp.service.PlayerService;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.squareup.okhttp.ResponseBody;
 
@@ -193,13 +192,13 @@ public class Utils implements Serializable {
         return (dipValue * scale + 0.5f);
     }
 
+    //PullToRefreshRecyclerView
     public static List<Data> getResult(final Context context, final String type,
                                        final PullToRefreshRecyclerView pullToRefreshRecyclerView,
                                        final List<Data> list,
                                        final TextView empty, final Handler mHandler) {
         Log.d("lihui", "List<Data> list---" + list);
         //1
-
         Retrofit retrofit = new Retrofit.Builder().
                 baseUrl("http://v.juhe.cn/").
                 addConverterFactory(GsonConverterFactory.create()).build();
@@ -266,7 +265,7 @@ public class Utils implements Serializable {
         return list;
     }
 
-    //GridView
+    //PullToRefreshGridView
     public static List<Data> getResult(final Context context, final String type,
                                        final PullToRefreshGridView pullToRefreshGridView,
                                        final List<Data> list,
