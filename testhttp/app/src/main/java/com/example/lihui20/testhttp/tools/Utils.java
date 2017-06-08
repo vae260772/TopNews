@@ -203,7 +203,6 @@ public class Utils implements Serializable {
         Retrofit retrofit = new Retrofit.Builder().
                 baseUrl("http://v.juhe.cn/").
                 addConverterFactory(GsonConverterFactory.create()).build();
-
         //2
         HttpService myService = retrofit.create(HttpService.class);
         //3
