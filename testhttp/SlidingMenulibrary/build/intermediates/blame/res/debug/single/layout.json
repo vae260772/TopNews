@@ -2,5 +2,9 @@
     {
         "merged": "E:\\testhttp\\SlidingMenulibrary\\build\\intermediates\\res\\merged\\debug\\layout\\slidingmenumain.xml",
         "source": "E:\\testhttp\\SlidingMenulibrary\\res\\layout\\slidingmenumain.xml"
+    },
+    {
+        "merged": "E:\\github\\TopNews\\testhttp\\SlidingMenulibrary\\build\\intermediates\\res\\merged\\debug\\layout\\slidingmenumain.xml",
+        "source": "E:\\github\\TopNews\\testhttp\\SlidingMenulibrary\\res\\layout\\slidingmenumain.xml"
     }
 ]

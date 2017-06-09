@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -55,10 +54,16 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import retrofit.Callback;
 import retrofit.Converter;
-import retrofit.Response;
 import retrofit.Retrofit;
+import retrofit.RxJavaCallAdapterFactory;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
+
 
 /**
  * Created by lihui20 on 2016/12/20.
@@ -320,101 +325,199 @@ public class Utils implements Serializable {
                                        final PullToRefreshGridView pullToRefreshGridView,
                                        final List<Data> list,
                                        final TextView empty, final Handler mHandler) {
-        Log.d("lihui", "List<Data> list---" + list);
         //1
 
         Retrofit retrofit = new Retrofit.Builder().
                 baseUrl("http://v.juhe.cn/").
-                addConverterFactory(CustomConverterFactory.create()).build();
+                addConverterFactory(CustomConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create()).build();
 
         //2
         HttpService myService = retrofit.create(HttpService.class);
         //3
-        retrofit.Call<List<Data>> call = myService.getData(type, "9f3097f4cbe47e8abb01ca3b92e49cda");
+        //  retrofit.Call<List<Data>> call = myService.getData(type, "9f3097f4cbe47e8abb01ca3b92e49cda");
         //4
-        call.enqueue(new Callback<List<Data>>() {
-
-            @Override
-            public void onResponse(Response<List<Data>> response, Retrofit retrofit) {
-                Log.d("lihui", "123onResponse");
-                try {
-                    List<Data> dataList = response.body();
-                    Utils.resetList(list, dataList);//交换数据
-                    Log.d("CustomConverterFactory", "  Utils.resetList(list, dataList)---" + list);
-
-                    if (list != null && list.size() > 0 && mHandler != null) {
-                        Message msg = mHandler.obtainMessage();
-                        msg.what = 0;
-                        msg.obj = list;
-                        mHandler.sendMessage(msg);
-                        empty.setVisibility(View.GONE);
-                        cacheMap.put(type, list);
+//        call.enqueue(new Callback<List<Data>>() {
+//
+//            @Override
+//            public void onResponse(Response<List<Data>> response, Retrofit retrofit) {
+//                Log.d("lihui", "123onResponse");
+//                Log.d("CustomConverterFactory","currentThread---"+Thread.currentThread().toString());
+//                try {
+//                    List<Data> dataList = response.body();
+//                    Utils.resetList(list, dataList);//交换数据
+//                    Log.d("CustomConverterFactory", "  Utils.resetList(list, dataList)---" + list);
+//                    if (list != null && list.size() > 0 && mHandler != null) {
+//                        Message msg = mHandler.obtainMessage();
+//                        msg.what = 0;
+//                        msg.obj = list;
+//                        mHandler.sendMessage(msg);
+//                        empty.setVisibility(View.GONE);
+//                        cacheMap.put(type, list);
+//                    }
+//                    Log.d("lihui", "159 list---" + list);
+//
+//                } catch (Exception e) {
+//                    Log.d("lihui", "114e---" + e.getMessage());
+//                    pullToRefreshGridView.onRefreshComplete();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Throwable t) {
+//                Log.d("CustomConverterFactory","currentThread---"+Thread.currentThread().toString());
+//                Log.d("lihui", "165t:" + t.getMessage());
+//                t.printStackTrace();
+//                Message msg = mHandler.obtainMessage();
+//                msg.what = 1;
+//                msg.obj = type;
+//                mHandler.sendMessage(msg);
+//            }
+//
+//        });
+        //4
+        Observable observable = myService.getData(type, "9f3097f4cbe47e8abb01ca3b92e49cda");              //获取Observable对象
+        observable.subscribeOn(Schedulers.io())  // 网络请求切换在io线程中调用
+                .unsubscribeOn(Schedulers.io())// 取消网络请求放在io线程
+                .observeOn(AndroidSchedulers.mainThread())// 观察后放在主线程调用
+                .doOnNext(new Action1<List<Data>>() {//1
+                    @Override
+                    public void call(List<Data> dataList) {
+                        //    saveUserInfo(userInfo);//保存用户信息到本地
+                        Log.d("CustomConverterFactory", "doOnNext call dataList---" + dataList);
+                        Log.d("CustomConverterFactory", "doOnNext call currentThread---" + Thread.currentThread().getName());
                     }
-                    Log.d("lihui", "159 list---" + list);
-
-                } catch (Exception e) {
-                    Log.d("lihui", "114e---" + e.getMessage());
-                    pullToRefreshGridView.onRefreshComplete();
-                }
-            }
-
+                }).doOnCompleted(new Action0() {
             @Override
-            public void onFailure(Throwable t) {
-                Log.d("lihui", "165t:" + t.getMessage());
-                t.printStackTrace();
-                Message msg = mHandler.obtainMessage();
-                msg.what = 1;
-                msg.obj = type;
-                mHandler.sendMessage(msg);
+            public void call() {
+                Log.d("CustomConverterFactory", "doOnCompleted call currentThread---" + Thread.currentThread().getName());
             }
+        })
+                .subscribe(
+                        new Subscriber<List<Data>>() {//subscribe 子线程
+                            @Override
+                            public void onCompleted() {
+                                Log.d("CustomConverterFactory", "onCompleted currentThread---" + Thread.currentThread().getName());
+                            }
 
-        });
+                            @Override
+                            public void onError(Throwable e) {
+                                e.printStackTrace();
+                                Log.d("CustomConverterFactory", "165t:" + e.getMessage());
+                                Message msg = mHandler.obtainMessage();
+                                msg.what = 1;
+                                msg.obj = type;
+                                mHandler.sendMessage(msg);
+                                //请求失败
+                                Log.d("CustomConverterFactory", "onError currentThread---" + Thread.currentThread().getName());
+                            }
+
+                            @Override
+                            public void onNext(List<Data> dataList) {
+                                //请求成功
+                                Log.d("CustomConverterFactory", "onNext currentThread---" + Thread.currentThread().getName());
+                                Utils.resetList(list, dataList);//交换数据
+                                try {
+                                    Log.d("CustomConverterFactory", "  Utils.resetList(list, dataList)---" + list);
+                                    if (list != null && list.size() > 0 && mHandler != null) {
+                                        Message msg = mHandler.obtainMessage();
+                                        msg.what = 0;
+                                        msg.obj = list;
+                                        mHandler.sendMessage(msg);
+                                        empty.setVisibility(View.GONE);
+                                        cacheMap.put(type, list);
+                                    }
+                                    Log.d("lihui", "159 list---" + list);
+
+                                } catch (Exception e) {
+                                    Log.d("lihui", "114e---" + e.getMessage());
+                                    pullToRefreshGridView.onRefreshComplete();
+                                }
+                            }
+                        });
+
+
+//        call.enqueue(new Callback<List<Data>>() {//retrofit2.xxx
+//            @Override
+//            public void onResponse(Call<List<Data>> call, Response<List<Data>> response) {
+//                Log.d("lihui", "123onResponse");
+//                try {
+//                    List<Data> dataList = response.body();
+//                    Log.d("CustomConverterFactory", "  Utils.resetList(list, dataList)---" + list);
+//                    Utils.resetList(list, dataList);//交换数据
+//
+//                    if (list != null && list.size() > 0 && mHandler != null) {
+//                        Message msg = mHandler.obtainMessage();
+//                        msg.what = 0;
+//                        msg.obj = list;
+//                        mHandler.sendMessage(msg);
+//                        empty.setVisibility(View.GONE);
+//                        cacheMap.put(type, list);
+//                    }
+//                    Log.d("lihui", "159 list---" + list);
+//
+//                } catch (Exception e) {
+//                    Log.d("lihui", "114e---" + e.getMessage());
+//                    pullToRefreshGridView.onRefreshComplete();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<Data>> call, Throwable t) {
+//                Log.d("lihui", "165t:" + t.getMessage());
+//                t.printStackTrace();
+//                Message msg = mHandler.obtainMessage();
+//                msg.what = 1;
+//                msg.obj = type;
+//                mHandler.sendMessage(msg);
+//            }
+//        });
         return list;
     }
 
-
-    public static void showCancelDialog(final Context context, final Data data, final CustomOnclick onclick) {
-        //  if (cancelBuilder == null) {
-        AlertDialog.Builder cancelBuilder = new AlertDialog.Builder(context).setTitle("提示").setMessage("亲,确认取消收藏这条新闻?");
-        //}
-        cancelBuilder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //从数据库删除
-                Log.d("lihui", "146 data---" + data.toString());
-                DBUtils db = new DBUtils(context);
-                db.delete(data);
-                onclick.onMyItemClick(data);
-            }
-        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        cancelBuilder.show();
-
-    }
-
-    public static void showDialog(final Context context, final Data data) {
-
-
-        if (builder == null) {
-            builder = new AlertDialog.Builder(context).setTitle("提示").setMessage("亲,确认收藏这条新闻?");
-        }
-        builder.setPositiveButton("收藏", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //保存数据库
-                Log.d("lihui", "140 data---" + data.toString());
-                DBUtils db = new DBUtils(context);
-                db.insert(data);
-            }
-        }).setNegativeButton("取消", null);
-
-        builder.show();
-
-    }
+//
+//    public static void showCancelDialog(final Context context, final Data data, final CustomOnclick onclick) {
+//        //  if (cancelBuilder == null) {
+//        AlertDialog.Builder cancelBuilder = new AlertDialog.Builder(context).setTitle("提示").setMessage("亲,确认取消收藏这条新闻?");
+//        //}
+//        cancelBuilder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                //从数据库删除
+//                Log.d("lihui", "146 data---" + data.toString());
+//                DBUtils db = new DBUtils(context);
+//                db.delete(data);
+//                onclick.onMyItemClick(data);
+//            }
+//        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.dismiss();
+//            }
+//        });
+//        cancelBuilder.show();
+//
+//    }
+//
+//    public static void showDialog(final Context context, final Data data) {
+//
+//
+//        if (builder == null) {
+//            builder = new AlertDialog.Builder(context).setTitle("提示").setMessage("亲,确认收藏这条新闻?");
+//        }
+//        builder.setPositiveButton("收藏", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                //保存数据库
+//                Log.d("lihui", "140 data---" + data.toString());
+//                DBUtils db = new DBUtils(context);
+//                db.insert(data);
+//            }
+//        }).setNegativeButton("取消", null);
+//
+//        builder.show();
+//
+//    }
 
 
     public static void resetList(List resultList, List newList) {

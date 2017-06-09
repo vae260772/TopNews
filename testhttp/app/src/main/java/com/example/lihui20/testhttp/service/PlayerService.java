@@ -2,28 +2,17 @@ package com.example.lihui20.testhttp.service;
 
 import android.app.Service;
 import android.content.Intent;
-import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.os.IBinder;
-import android.provider.MediaStore;
-import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.ListView;
 
-import com.example.lihui20.testhttp.adapter.MusicAdapter;
 import com.example.lihui20.testhttp.model.Music;
 import com.example.lihui20.testhttp.tools.MediaUtils;
 import com.example.lihui20.testhttp.tools.ToastUtils;
 import com.example.lihui20.testhttp.tools.Utils;
-import com.squareup.okhttp.ResponseBody;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import retrofit.Call;
-import retrofit.http.POST;
-import retrofit.http.Query;
 
 /**
  * Created by lihui20 on 2016/12/6.

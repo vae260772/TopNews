@@ -2,5 +2,9 @@
     {
         "merged": "E:\\testhttp\\ViewPagerIndicator-library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\vpi__tab_indicator.xml",
         "source": "E:\\testhttp\\ViewPagerIndicator-library\\build\\intermediates\\bundles\\debug\\res\\drawable\\vpi__tab_indicator.xml"
+    },
+    {
+        "merged": "E:\\github\\TopNews\\testhttp\\ViewPagerIndicator-library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\vpi__tab_indicator.xml",
+        "source": "E:\\github\\TopNews\\testhttp\\ViewPagerIndicator-library\\build\\intermediates\\bundles\\debug\\res\\drawable\\vpi__tab_indicator.xml"
     }
 ]

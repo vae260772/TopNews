@@ -345,5 +345,352 @@
                 }
             }
         ]
+    },
+    {
+        "outputFile": "E:\\github\\TopNews\\testhttp\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\values\\values.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 4,
+                    "startColumn": 4,
+                    "startOffset": 1828,
+                    "endColumn": 63,
+                    "endOffset": 1887
+                },
+                "from": {
+                    "file": "E:\\github\\TopNews\\testhttp\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 1511,
+                        "endColumn": 63,
+                        "endOffset": 1570
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 5,
+                    "startColumn": 4,
+                    "startOffset": 1892,
+                    "endColumn": 63,
+                    "endOffset": 1951
+                },
+                "from": {
+                    "file": "E:\\github\\TopNews\\testhttp\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 1575,
+                        "endColumn": 63,
+                        "endOffset": 1634
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 6,
+                    "startColumn": 4,
+                    "startOffset": 1956,
+                    "endColumn": 54,
+                    "endOffset": 2006
+                },
+                "from": {
+                    "file": "E:\\github\\TopNews\\testhttp\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 1639,
+                        "endColumn": 54,
+                        "endOffset": 1689
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 7,
+                    "startColumn": 4,
+                    "startOffset": 2011,
+                    "endColumn": 56,
+                    "endOffset": 2063
+                },
+                "from": {
+                    "file": "E:\\github\\TopNews\\testhttp\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 1694,
+                        "endColumn": 56,
+                        "endOffset": 1746
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 8,
+                    "startColumn": 4,
+                    "startOffset": 2068,
+                    "endColumn": 54,
+                    "endOffset": 2118
+                },
+                "from": {
+                    "file": "E:\\github\\TopNews\\testhttp\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 7,
+                        "startColumn": 4,
+                        "startOffset": 1751,
+                        "endColumn": 54,
+                        "endOffset": 1801
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 9,
+                    "startColumn": 4,
+                    "startOffset": 2123,
+                    "endColumn": 74,
+                    "endOffset": 2193
+                },
+                "from": {
+                    "file": "E:\\github\\TopNews\\testhttp\\library\\build\\intermediates\\exploded-aar\\com.android.support\\recyclerview-v7\\24.1.1\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 372,
+                        "endColumn": 74,
+                        "endOffset": 442
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 10,
+                    "startColumn": 4,
+                    "startOffset": 2198,
+                    "endColumn": 75,
+                    "endOffset": 2269
+                },
+                "from": {
+                    "file": "E:\\github\\TopNews\\testhttp\\library\\build\\intermediates\\exploded-aar\\com.android.support\\recyclerview-v7\\24.1.1\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 447,
+                        "endColumn": 75,
+                        "endOffset": 518
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 11,
+                    "startColumn": 4,
+                    "startOffset": 2274,
+                    "endColumn": 71,
+                    "endOffset": 2341
+                },
+                "from": {
+                    "file": "E:\\github\\TopNews\\testhttp\\library\\build\\intermediates\\exploded-aar\\com.android.support\\recyclerview-v7\\24.1.1\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 523,
+                        "endColumn": 71,
+                        "endOffset": 590
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 12,
+                    "startColumn": 4,
+                    "startOffset": 2346,
+                    "endColumn": 37,
+                    "endOffset": 2379
+                },
+                "from": {
+                    "file": "E:\\github\\TopNews\\testhttp\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 8,
+                        "startColumn": 4,
+                        "startOffset": 1806,
+                        "endColumn": 37,
+                        "endOffset": 1839
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 13,
+                    "startColumn": 4,
+                    "startOffset": 2384,
+                    "endColumn": 65,
+                    "endOffset": 2445
+                },
+                "from": {
+                    "file": "E:\\github\\TopNews\\testhttp\\library\\build\\intermediates\\exploded-aar\\com.android.support\\recyclerview-v7\\24.1.1\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 595,
+                        "endColumn": 65,
+                        "endOffset": 656
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 14,
+                    "startColumn": 4,
+                    "startOffset": 2450,
+                    "endColumn": 39,
+                    "endOffset": 2485
+                },
+                "from": {
+                    "file": "E:\\github\\TopNews\\testhttp\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 9,
+                        "startColumn": 4,
+                        "startOffset": 1844,
+                        "endColumn": 39,
+                        "endOffset": 1879
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 15,
+                    "startColumn": 4,
+                    "startOffset": 2490,
+                    "endColumn": 36,
+                    "endOffset": 2522
+                },
+                "from": {
+                    "file": "E:\\github\\TopNews\\testhttp\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 10,
+                        "startColumn": 4,
+                        "startOffset": 1884,
+                        "endColumn": 36,
+                        "endOffset": 1916
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 16,
+                    "startColumn": 4,
+                    "startOffset": 2527,
+                    "endColumn": 101,
+                    "endOffset": 2624
+                },
+                "from": {
+                    "file": "E:\\github\\TopNews\\testhttp\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 11,
+                        "startColumn": 4,
+                        "startOffset": 1921,
+                        "endColumn": 101,
+                        "endOffset": 2018
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 17,
+                    "startColumn": 4,
+                    "startOffset": 2629,
+                    "endColumn": 113,
+                    "endOffset": 2738
+                },
+                "from": {
+                    "file": "E:\\github\\TopNews\\testhttp\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 12,
+                        "startColumn": 4,
+                        "startOffset": 2023,
+                        "endColumn": 113,
+                        "endOffset": 2132
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 18,
+                    "startColumn": 4,
+                    "startOffset": 2743,
+                    "endColumn": 107,
+                    "endOffset": 2846
+                },
+                "from": {
+                    "file": "E:\\github\\TopNews\\testhttp\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 13,
+                        "startColumn": 4,
+                        "startOffset": 2137,
+                        "endColumn": 107,
+                        "endOffset": 2240
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 19,
+                    "startColumn": 4,
+                    "startOffset": 2851,
+                    "endColumn": 71,
+                    "endOffset": 2918
+                },
+                "from": {
+                    "file": "E:\\github\\TopNews\\testhttp\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 14,
+                        "startColumn": 4,
+                        "startOffset": 2245,
+                        "endColumn": 71,
+                        "endOffset": 2312
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 20,
+                    "startColumn": 4,
+                    "startOffset": 2923,
+                    "endColumn": 69,
+                    "endOffset": 2988
+                },
+                "from": {
+                    "file": "E:\\github\\TopNews\\testhttp\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 15,
+                        "startColumn": 4,
+                        "startOffset": 2317,
+                        "endColumn": 69,
+                        "endOffset": 2382
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 21,
+                    "startColumn": 4,
+                    "startOffset": 2993,
+                    "endColumn": 77,
+                    "endOffset": 3066
+                },
+                "from": {
+                    "file": "E:\\github\\TopNews\\testhttp\\library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 16,
+                        "startColumn": 4,
+                        "startOffset": 2387,
+                        "endColumn": 77,
+                        "endOffset": 2460
+                    }
+                }
+            }
+        ]
     }
 ]

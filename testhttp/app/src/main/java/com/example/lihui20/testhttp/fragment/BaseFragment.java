@@ -2,8 +2,6 @@ package com.example.lihui20.testhttp.fragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -28,7 +26,6 @@ import com.example.lihui20.testhttp.adapter.CustomRecyclerViewAdapter;
 import com.example.lihui20.testhttp.customview.PullToRefreshRecyclerView;
 import com.example.lihui20.testhttp.customview.SpacesItemDecoration;
 import com.example.lihui20.testhttp.database.NewsCacheUtils;
-import com.example.lihui20.testhttp.interface2.CustomOnclick;
 import com.example.lihui20.testhttp.model.Data;
 import com.example.lihui20.testhttp.tools.ToastUtils;
 import com.example.lihui20.testhttp.tools.Utils;
@@ -102,7 +99,7 @@ public class BaseFragment extends Fragment {
         ILoadingLayout endLoading = pullToRefreshrecycleview.getLoadingLayoutProxy(false,
                 true);
         endLoading.setPullLabel("上拉刷新...");
-      //  recycleview = pullToRefreshrecycleview.getRefreshableView();
+        //  recycleview = pullToRefreshrecycleview.getRefreshableView();
         pullToRefreshrecycleview.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<RecyclerView>() {
             @Override
             public void onRefresh(PullToRefreshBase<RecyclerView> refreshView) {
@@ -153,10 +150,10 @@ public class BaseFragment extends Fragment {
     }
 
     private List<Data> getResult() {
-        resultList = Utils.getResult(getActivity(), type,
-                pullToRefreshrecycleview, resultList, empty, mHndler);
-        //getResult异步的
-        Log.d("BaseFragment", "pullRefresh resultList---" + resultList);
+//        resultList = Utils.getResult(getActivity(), type,
+//                pullToRefreshrecycleview, resultList, empty, mHndler);
+//        //getResult异步的
+//        Log.d("BaseFragment", "pullRefresh resultList---" + resultList);
 
         return resultList;
     }
@@ -195,7 +192,7 @@ public class BaseFragment extends Fragment {
                             pullToRefreshrecycleview.onRefreshComplete();
                             isRefreshing = false;
                             settingInterface.setOnSetClick(false);
-                        //    ((MainActivity) getActivity()).isShowSetting(false);
+                            //    ((MainActivity) getActivity()).isShowSetting(false);
 
                             break;
                         case 1:

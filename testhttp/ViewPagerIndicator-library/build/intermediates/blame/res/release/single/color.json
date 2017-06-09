@@ -4,7 +4,15 @@
         "source": "E:\\testhttp\\ViewPagerIndicator-library\\src\\main\\res\\color\\vpi__light_theme.xml"
     },
     {
+        "merged": "E:\\github\\TopNews\\testhttp\\ViewPagerIndicator-library\\build\\intermediates\\res\\merged\\release\\color\\vpi__light_theme.xml",
+        "source": "E:\\github\\TopNews\\testhttp\\ViewPagerIndicator-library\\src\\main\\res\\color\\vpi__light_theme.xml"
+    },
+    {
         "merged": "E:\\testhttp\\ViewPagerIndicator-library\\build\\intermediates\\res\\merged\\release\\color\\vpi__dark_theme.xml",
         "source": "E:\\testhttp\\ViewPagerIndicator-library\\src\\main\\res\\color\\vpi__dark_theme.xml"
+    },
+    {
+        "merged": "E:\\github\\TopNews\\testhttp\\ViewPagerIndicator-library\\build\\intermediates\\res\\merged\\release\\color\\vpi__dark_theme.xml",
+        "source": "E:\\github\\TopNews\\testhttp\\ViewPagerIndicator-library\\src\\main\\res\\color\\vpi__dark_theme.xml"
     }
 ]

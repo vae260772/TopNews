@@ -4,8 +4,20 @@
         "source": "E:\\testhttp\\ViewPagerIndicator-library\\src\\main\\res\\drawable-hdpi\\vpi__tab_selected_holo.9.png"
     },
     {
+        "merged": "E:\\github\\TopNews\\testhttp\\ViewPagerIndicator-library\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\vpi__tab_unselected_focused_holo.9.png",
+        "source": "E:\\github\\TopNews\\testhttp\\ViewPagerIndicator-library\\src\\main\\res\\drawable-hdpi\\vpi__tab_unselected_focused_holo.9.png"
+    },
+    {
+        "merged": "E:\\github\\TopNews\\testhttp\\ViewPagerIndicator-library\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\vpi__tab_unselected_pressed_holo.9.png",
+        "source": "E:\\github\\TopNews\\testhttp\\ViewPagerIndicator-library\\src\\main\\res\\drawable-hdpi\\vpi__tab_unselected_pressed_holo.9.png"
+    },
+    {
         "merged": "E:\\testhttp\\ViewPagerIndicator-library\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\vpi__tab_selected_pressed_holo.9.png",
         "source": "E:\\testhttp\\ViewPagerIndicator-library\\src\\main\\res\\drawable-hdpi\\vpi__tab_selected_pressed_holo.9.png"
+    },
+    {
+        "merged": "E:\\github\\TopNews\\testhttp\\ViewPagerIndicator-library\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\vpi__tab_selected_pressed_holo.9.png",
+        "source": "E:\\github\\TopNews\\testhttp\\ViewPagerIndicator-library\\src\\main\\res\\drawable-hdpi\\vpi__tab_selected_pressed_holo.9.png"
     },
     {
         "merged": "E:\\testhttp\\ViewPagerIndicator-library\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\vpi__tab_unselected_holo.9.png",
@@ -16,8 +28,20 @@
         "source": "E:\\testhttp\\ViewPagerIndicator-library\\src\\main\\res\\drawable-hdpi\\vpi__tab_selected_focused_holo.9.png"
     },
     {
+        "merged": "E:\\github\\TopNews\\testhttp\\ViewPagerIndicator-library\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\vpi__tab_selected_focused_holo.9.png",
+        "source": "E:\\github\\TopNews\\testhttp\\ViewPagerIndicator-library\\src\\main\\res\\drawable-hdpi\\vpi__tab_selected_focused_holo.9.png"
+    },
+    {
+        "merged": "E:\\github\\TopNews\\testhttp\\ViewPagerIndicator-library\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\vpi__tab_selected_holo.9.png",
+        "source": "E:\\github\\TopNews\\testhttp\\ViewPagerIndicator-library\\src\\main\\res\\drawable-hdpi\\vpi__tab_selected_holo.9.png"
+    },
+    {
         "merged": "E:\\testhttp\\ViewPagerIndicator-library\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\vpi__tab_unselected_focused_holo.9.png",
         "source": "E:\\testhttp\\ViewPagerIndicator-library\\src\\main\\res\\drawable-hdpi\\vpi__tab_unselected_focused_holo.9.png"
+    },
+    {
+        "merged": "E:\\github\\TopNews\\testhttp\\ViewPagerIndicator-library\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\vpi__tab_unselected_holo.9.png",
+        "source": "E:\\github\\TopNews\\testhttp\\ViewPagerIndicator-library\\src\\main\\res\\drawable-hdpi\\vpi__tab_unselected_holo.9.png"
     },
     {
         "merged": "E:\\testhttp\\ViewPagerIndicator-library\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\vpi__tab_unselected_pressed_holo.9.png",
