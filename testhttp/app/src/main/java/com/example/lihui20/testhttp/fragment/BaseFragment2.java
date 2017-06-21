@@ -72,14 +72,12 @@ public class BaseFragment2 extends Fragment {
 
     }
 
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         Log.d("BaseFragment531", "typeFragment---" + typeFragment + "," + "BaseFragment onCreateOptionsMenu");
 
     }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -189,7 +187,7 @@ public class BaseFragment2 extends Fragment {
     private List<Data> getResult() {
         Log.d("BaseFragment", "typeFragment---" + typeFragment);
         resultList = Utils.getResult(typeFragment,
-                pullToRefreshGridView, empty,resultList, mHandler);
+                pullToRefreshGridView, empty, resultList, mHandler);
         //getResult异步的
         Log.d("BaseFragment", "pullRefresh resultList---" + resultList);
         return resultList;

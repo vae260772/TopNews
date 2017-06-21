@@ -104,10 +104,7 @@ public class FavoriteActivity extends Activity {
         //刷新分页
         favorite_listview.setMode(PullToRefreshBase.Mode.BOTH);
         listview = favorite_listview.getRefreshableView();
-
-        Log.d("FavoriteActivity", "FavoriteActivity---listview---");
         listview.setVerticalScrollBarEnabled(false);
-
         favoritell = (LinearLayout) findViewById(R.id.favoritell);
 
         favorite_listview.setOnClickListener(new View.OnClickListener() {
@@ -151,6 +148,10 @@ public class FavoriteActivity extends Activity {
 
         //
         empty = (TextView) findViewById(R.id.empty_favorite);
+        if (DBUtils.getInstance(mContext).queryAll().size() == 0) {
+            //没有收藏过，禁止刷新
+            favorite_listview.setMode(PullToRefreshBase.Mode.DISABLED);
+        }
         //
         com.example.lihui20.testhttp.animation.AnimationUtils.alphaAnimation(empty);
         //
@@ -163,6 +164,7 @@ public class FavoriteActivity extends Activity {
             public void onMyItemClick(Data data) {
                 if (DBUtils.getInstance(mContext).queryAll().size() == 0) {
                     empty.setVisibility(View.VISIBLE);
+                    listview.setVisibility(View.GONE);
                     //刷新分页
                     favorite_listview.setMode(PullToRefreshBase.Mode.DISABLED);
                 }
@@ -191,11 +193,19 @@ public class FavoriteActivity extends Activity {
                 newsAdapter = new NewsAdapter(this, less4list, onclick);
             }
             listview.setAdapter(newsAdapter);
+
         }
+        Log.d("FavoriteActivity", "FavoriteActivity---listview---" + listview.getCount());
     }
 
 
     private void doRefresh() {
+        Log.d("FavoriteActivity", "FavoriteActivity doRefresh---listview---" + listview.getCount());
+        if (listview.getCount() > 0) {
+            for (int i = 0; i < listview.getCount(); i++) {
+                Log.d("FavoriteActivity", "FavoriteActivity---listview---" + listview.getChildAt(i).toString());
+            }
+        }
         if (!isRefreshing) {
 
             isRefreshing = true;

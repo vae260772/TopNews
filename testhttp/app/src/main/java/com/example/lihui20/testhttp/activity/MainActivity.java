@@ -74,8 +74,10 @@ public class MainActivity extends FragmentActivity {
         Log.d(TAG, "getActionBar()---" + getActionBar());
         android.app.ActionBar actionBar = getActionBar();
         ActionBarUtil.showCustomActionBar(actionBar, false, true, false, true);
+
+        Log.d("MainActivity", "first onCreate");
+
         initViews();
-        Log.d("lihui", "MainActivity onCreate");
         initSlidingMenu();
     }
 

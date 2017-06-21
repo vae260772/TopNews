@@ -26,6 +26,7 @@
             android:layout_gravity="center_horizontal"
             android:divider="@null"
             android:listSelector="#00ffffff"
+            ptr:ptrAnimationStyle="flip"
             ptr:ptrHeaderSubTextColor="#ffffff"
             ptr:ptrHeaderTextColor="#ffffff" />
 

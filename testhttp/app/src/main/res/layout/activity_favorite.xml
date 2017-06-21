@@ -26,6 +26,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
             android:divider="@null"
+            ptr:ptrAnimationStyle="flip"
             ptr:ptrHeaderSubTextColor="#ffffff"
             ptr:ptrHeaderTextColor="#ffffff" />
 

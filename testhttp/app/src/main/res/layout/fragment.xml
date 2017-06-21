@@ -47,7 +47,8 @@
                 android:verticalSpacing="8dp"
                 ptr:ptrShowIndicator="false"
                 ptr:ptrHeaderTextColor="#ffffff"
-                ptr:ptrHeaderSubTextColor="#ffffff"/>
+                ptr:ptrHeaderSubTextColor="#ffffff"
+                ptr:ptrAnimationStyle="flip" />
 
             <TextView
                 android:id="@+id/empty"

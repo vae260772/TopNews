@@ -2,6 +2,7 @@ package com.example.lihui20.testhttp.application;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -18,9 +19,10 @@ public class CustomNewsApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        mContext = getApplicationContext();
-        ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this));
-        SMSSDK.initSDK(this, "1bc697ea4141c", "6733d8701dcd74df18cd836d710a9e73");
+        mContext = this;
+        ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(mContext));
+        SMSSDK.initSDK(mContext, "1bc697ea4141c", "6733d8701dcd74df18cd836d710a9e73");
+        Log.d("CustomNewsApplication","first onCreate");
     }
     public static Context getInstance() {
         if (mContext == null) {
