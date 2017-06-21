@@ -5,14 +5,12 @@ import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.media.MediaScannerConnection;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -112,36 +110,27 @@ public class Utils implements Serializable {
             if (intent.getAction().equals("com.example.lihui20.testhttp.MusicBroadcastReceiver")) {
                 boolean state = intent.getExtras().getBoolean("state", false);
                 Log.d("Recevier1", "接收到:" + state);
-                //还原
-                //MediaUtils.setListPosition(-1000);
-//                MediaUtils.setPlayState(false);//单曲播放，播完了就结束
-//                //
-//                MediaUtils.setPlaying(null);
-//                MediaUtils.setPauseMusic(null);
                 MediaUtils.playEnd();
-                // MediaUtils.setSelectMusic(null);
-                //
+
                 notify.update(true);
             }
         }
     }
 
-
-    public static interface PlayMusicInter {
+    public interface PlayMusicInter {
         public void setPlay(Music music, boolean play, boolean update, int position);
     }
 
     public static DeleteMusicInter deleteMusicInter;
 
-    public static interface DeleteMusicInter {
-        public void delete(Music music);
+    public interface DeleteMusicInter {
+        void delete(Music music);
     }
 
     public static void setDeleteMusicInter(DeleteMusicInter deleteMusicInter) {
         Utils.deleteMusicInter = deleteMusicInter;
     }
 
-    //
     public static void setDeleteMusicSucessInter(DeleteMusicSucessInter deleteMusicSucessInter) {
         Utils.deleteMusicSucessInter = deleteMusicSucessInter;
     }
@@ -152,20 +141,6 @@ public class Utils implements Serializable {
         void deleteSucess();
     }
 
-    //dialog
-    static AlertDialog.Builder builder;
-
-    public static String[] typesArray(List<Fragment> fragments) {
-        List<String> typeList = new ArrayList<>();
-        for (Fragment fragment : fragments) {
-            String type = fragment.getArguments().getString("type");
-            typeList.add(type);
-        }
-
-        return typeList.toArray(new String[typeList.size()]);
-    }
-
-    //private AlertDialog.Builder cancelBuilder;
     public static String getKey(String chinese) {
         int position = 0;
         for (int i = 0; i < TYPEARRAY2.length; i++) {
@@ -188,16 +163,6 @@ public class Utils implements Serializable {
             }
         }
         return addList.toArray(new String[addList.size()]);
-    }
-
-    public static int px2dip(int pxValue) {
-        final float scale = Resources.getSystem().getDisplayMetrics().density;
-        return (int) (pxValue / scale + 0.5f);
-    }
-
-    public static float dip2px(float dipValue) {
-        final float scale = Resources.getSystem().getDisplayMetrics().density;
-        return (dipValue * scale + 0.5f);
     }
 
     static class CustomConverterFactory extends Converter.Factory {
@@ -236,8 +201,6 @@ public class Utils implements Serializable {
             try {
                 org.json.JSONObject jsonObject = null;
                 jsonObject = new org.json.JSONObject(result);
-                String reason = jsonObject.getString("reason");
-                //  ToastUtils.setToastText(context, reason);
                 String result2 = jsonObject.getString("result");
                 //构造2
                 org.json.JSONObject jsonObject2 = new org.json.JSONObject(result2);
@@ -250,8 +213,8 @@ public class Utils implements Serializable {
                     org.json.JSONObject myjObject = jsonArray2.getJSONObject(i);
                     if (myjObject != null) {
                         Data data1 = new Data(myjObject);
-                        Log.d("lihui", "Fragment onResponse getUniquekey---" + data1.getUniquekey());
-                        Log.d("lihui", "Fragment onResponse data---" + data1);
+                        Log.d("Utils", "Fragment onResponse getUniquekey---" + data1.getUniquekey());
+                        Log.d("Utils", "Fragment onResponse data---" + data1);
                         list.add(data1);
                     }
                 }
@@ -264,67 +227,13 @@ public class Utils implements Serializable {
         }
     }
 
-    //PullToRefreshRecyclerView
-//    public static List<Data> getResult(final Context context, final String type,
-//                                       final PullToRefreshRecyclerView pullToRefreshRecyclerView,
-//                                       final List<Data> list,
-//                                       final TextView empty, final Handler mHandler) {
-//        Log.d("lihui", "List<Data> list---" + list);
-//        //1
-//        Retrofit retrofit = new Retrofit.Builder().
-//                baseUrl("http://v.juhe.cn/").
-//                addConverterFactory(new CustomConverterFactory()).
-//                build();
-//        //2
-//        HttpService myService = retrofit.create(HttpService.class);
-//        //3
-//        retrofit.Call<List<Data>> call = myService.getData(type, "9f3097f4cbe47e8abb01ca3b92e49cda");
-//        //4
-//        call.enqueue(new Callback<List<Data>>() {
-//
-//            @Override
-//            public void onResponse(Response<List<Data>> response, Retrofit retrofit) {
-//                Log.d("lihui", "123onResponse");
-//                try {
-//                    List<Data> dataList = response.body();
-//                    Utils.resetList(list, dataList);//交换数据
-//                    Log.d("CustomConverterFactory", "  Utils.resetList(list, dataList)---" + list);
-//
-//                    if (list != null && list.size() > 0 && mHandler != null) {
-//                        Message msg = mHandler.obtainMessage();
-//                        msg.what = 0;
-//                        msg.obj = list;
-//                        mHandler.sendMessage(msg);
-//                        empty.setVisibility(View.GONE);
-//                        cacheMap.put(type, list);
-//                    }
-//                    Log.d("lihui", "159 list---" + list);
-//
-//                } catch (Exception e) {
-//                    Log.d("lihui", "114e---" + e.getMessage());
-//                    pullToRefreshRecyclerView.onRefreshComplete();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Throwable t) {
-//                Log.d("lihui", "165t:" + t.getMessage());
-//                t.printStackTrace();
-//                Message msg = mHandler.obtainMessage();
-//                msg.what = 1;
-//                msg.obj = type;
-//                mHandler.sendMessage(msg);
-//            }
-//
-//        });
-//        return list;
-//    }
-
     //PullToRefreshGridView
-    public static List<Data> getResult(final Context context, final String type,
+    public static List<Data> getResult(final String type,
                                        final PullToRefreshGridView pullToRefreshGridView,
+                                       final TextView empty,
                                        final List<Data> list,
-                                       final TextView empty, final Handler mHandler) {
+                                       final Handler mHandler) {
+        Log.d("CustomConverterFactory", "type---" + type);
         //1
 
         Retrofit retrofit = new Retrofit.Builder().
@@ -334,48 +243,8 @@ public class Utils implements Serializable {
 
         //2
         HttpService myService = retrofit.create(HttpService.class);
+
         //3
-        //  retrofit.Call<List<Data>> call = myService.getData(type, "9f3097f4cbe47e8abb01ca3b92e49cda");
-        //4
-//        call.enqueue(new Callback<List<Data>>() {
-//
-//            @Override
-//            public void onResponse(Response<List<Data>> response, Retrofit retrofit) {
-//                Log.d("lihui", "123onResponse");
-//                Log.d("CustomConverterFactory","currentThread---"+Thread.currentThread().toString());
-//                try {
-//                    List<Data> dataList = response.body();
-//                    Utils.resetList(list, dataList);//交换数据
-//                    Log.d("CustomConverterFactory", "  Utils.resetList(list, dataList)---" + list);
-//                    if (list != null && list.size() > 0 && mHandler != null) {
-//                        Message msg = mHandler.obtainMessage();
-//                        msg.what = 0;
-//                        msg.obj = list;
-//                        mHandler.sendMessage(msg);
-//                        empty.setVisibility(View.GONE);
-//                        cacheMap.put(type, list);
-//                    }
-//                    Log.d("lihui", "159 list---" + list);
-//
-//                } catch (Exception e) {
-//                    Log.d("lihui", "114e---" + e.getMessage());
-//                    pullToRefreshGridView.onRefreshComplete();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Throwable t) {
-//                Log.d("CustomConverterFactory","currentThread---"+Thread.currentThread().toString());
-//                Log.d("lihui", "165t:" + t.getMessage());
-//                t.printStackTrace();
-//                Message msg = mHandler.obtainMessage();
-//                msg.what = 1;
-//                msg.obj = type;
-//                mHandler.sendMessage(msg);
-//            }
-//
-//        });
-        //4
         Observable observable = myService.getData(type, "9f3097f4cbe47e8abb01ca3b92e49cda");              //获取Observable对象
         observable.subscribeOn(Schedulers.io())  // 网络请求切换在io线程中调用
                 .unsubscribeOn(Schedulers.io())// 取消网络请求放在io线程
@@ -383,7 +252,6 @@ public class Utils implements Serializable {
                 .doOnNext(new Action1<List<Data>>() {//1
                     @Override
                     public void call(List<Data> dataList) {
-                        //    saveUserInfo(userInfo);//保存用户信息到本地
                         Log.d("CustomConverterFactory", "doOnNext call dataList---" + dataList);
                         Log.d("CustomConverterFactory", "doOnNext call currentThread---" + Thread.currentThread().getName());
                     }
@@ -420,105 +288,23 @@ public class Utils implements Serializable {
                                 try {
                                     Log.d("CustomConverterFactory", "  Utils.resetList(list, dataList)---" + list);
                                     if (list != null && list.size() > 0 && mHandler != null) {
+                                        empty.setVisibility(View.GONE);
                                         Message msg = mHandler.obtainMessage();
                                         msg.what = 0;
                                         msg.obj = list;
                                         mHandler.sendMessage(msg);
-                                        empty.setVisibility(View.GONE);
                                         cacheMap.put(type, list);
                                     }
-                                    Log.d("lihui", "159 list---" + list);
-
+                                    Log.d("Utils", "159 list---" + list);
                                 } catch (Exception e) {
-                                    Log.d("lihui", "114e---" + e.getMessage());
+                                    Log.d("Utils", "114e---" + e.getMessage());
                                     pullToRefreshGridView.onRefreshComplete();
                                 }
                             }
                         });
 
-
-//        call.enqueue(new Callback<List<Data>>() {//retrofit2.xxx
-//            @Override
-//            public void onResponse(Call<List<Data>> call, Response<List<Data>> response) {
-//                Log.d("lihui", "123onResponse");
-//                try {
-//                    List<Data> dataList = response.body();
-//                    Log.d("CustomConverterFactory", "  Utils.resetList(list, dataList)---" + list);
-//                    Utils.resetList(list, dataList);//交换数据
-//
-//                    if (list != null && list.size() > 0 && mHandler != null) {
-//                        Message msg = mHandler.obtainMessage();
-//                        msg.what = 0;
-//                        msg.obj = list;
-//                        mHandler.sendMessage(msg);
-//                        empty.setVisibility(View.GONE);
-//                        cacheMap.put(type, list);
-//                    }
-//                    Log.d("lihui", "159 list---" + list);
-//
-//                } catch (Exception e) {
-//                    Log.d("lihui", "114e---" + e.getMessage());
-//                    pullToRefreshGridView.onRefreshComplete();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Data>> call, Throwable t) {
-//                Log.d("lihui", "165t:" + t.getMessage());
-//                t.printStackTrace();
-//                Message msg = mHandler.obtainMessage();
-//                msg.what = 1;
-//                msg.obj = type;
-//                mHandler.sendMessage(msg);
-//            }
-//        });
         return list;
     }
-
-//
-//    public static void showCancelDialog(final Context context, final Data data, final CustomOnclick onclick) {
-//        //  if (cancelBuilder == null) {
-//        AlertDialog.Builder cancelBuilder = new AlertDialog.Builder(context).setTitle("提示").setMessage("亲,确认取消收藏这条新闻?");
-//        //}
-//        cancelBuilder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                //从数据库删除
-//                Log.d("lihui", "146 data---" + data.toString());
-//                DBUtils db = new DBUtils(context);
-//                db.delete(data);
-//                onclick.onMyItemClick(data);
-//            }
-//        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//            }
-//        });
-//        cancelBuilder.show();
-//
-//    }
-//
-//    public static void showDialog(final Context context, final Data data) {
-//
-//
-//        if (builder == null) {
-//            builder = new AlertDialog.Builder(context).setTitle("提示").setMessage("亲,确认收藏这条新闻?");
-//        }
-//        builder.setPositiveButton("收藏", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                //保存数据库
-//                Log.d("lihui", "140 data---" + data.toString());
-//                DBUtils db = new DBUtils(context);
-//                db.insert(data);
-//            }
-//        }).setNegativeButton("取消", null);
-//
-//        builder.show();
-//
-//    }
-
 
     public static void resetList(List resultList, List newList) {
 
@@ -546,38 +332,7 @@ public class Utils implements Serializable {
         }
     }
 
-    public static void resetListUpdate(List oldList, List newList, NewsAdapter newsAdapter, boolean isSearch) {
-        if (oldList != null) {
-            oldList.clear();
-        }
-        if (newList != null) {
-            for (int i = 0; i < newList.size(); i++) {
-                oldList.add(newList.get(i));
-            }
-            if (newsAdapter != null && !isSearch) {
-                newsAdapter.notifyDataSetChanged();
-            }
-        }
-    }
-
-    public static List<Data> getKeyValueList(List currentList, List keyList) {
-        List getKeyList = new ArrayList();
-        for (int i = 0; i < keyList.size(); i++) {
-            Data keyData = (Data) (keyList.get(i));
-            for (int j = 0; j < currentList.size(); j++) {
-                Data currentData = (Data) (currentList.get(j));
-                if (keyData.getTitle().equals(currentData.getTitle())) {
-                    getKeyList.add(keyData);
-                }
-            }
-        }
-        return getKeyList;
-
-    }
-
     public static void openURL(Context context, String url) {
-
-        //  Uri uri = Uri.parse(url);
         Intent intent = new Intent(context, WebViewActivity.class);
         intent.putExtra("url", url);
         context.startActivity(intent);
@@ -587,6 +342,7 @@ public class Utils implements Serializable {
 
 
     public static void showOperateDialog(final Context context, final Data data, final CustomOnclick onclick) {
+        ListView listView = new ListView(context);//this为获取当前的上下文
         if (onclick != null) {
             titles[0] = "取消收藏";
         } else {
@@ -601,21 +357,15 @@ public class Utils implements Serializable {
         }
         SimpleAdapter simpleAdapter = new SimpleAdapter(context, list,
                 android.R.layout.simple_list_item_1, new String[]{"title"}, new int[]{android.R.id.text1});
-        //
-        LinearLayout ll = new LinearLayout(context);//自定义一个布局文件
-        ll.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        //
-        ListView listView = new ListView(context);//this为获取当前的上下文
+
+
         listView.setFadingEdgeLength(0);
         listView.setAdapter(simpleAdapter);
-        //
 
         final AlertDialog dialog = new AlertDialog.Builder(context)
                 .setTitle("选项").setView(listView)//在这里把写好的这个listview的布局加载dialog中
                 .create();
         dialog.show();
-//
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -623,7 +373,7 @@ public class Utils implements Serializable {
                     case 0:
                         if (titles[0].equals("取消收藏") && onclick != null) {
                             //从数据库删除
-                            Log.d("lihui", "146 data---" + data.toString());
+                            Log.d("Utils", "146 data---" + data.toString());
                             DBUtils db = new DBUtils(context);
                             db.delete(data);
                             onclick.onMyItemClick(data);
@@ -641,11 +391,9 @@ public class Utils implements Serializable {
                                 "我正在浏览这条新闻,觉得真不错,推荐给你哦~地址点这里:\n" + data.getUrl());
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(Intent.createChooser(intent, "share"));
-                        //dialog.cancel();
                         break;
                     case 2:
                         Utils.openURL(context, data.getUrl());
-                        //dialog.cancel();
                         break;
                 }
                 dialog.cancel();
@@ -694,20 +442,10 @@ public class Utils implements Serializable {
             String MIME_TYPE = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.MIME_TYPE));
             String YEAR = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.YEAR));
 
-
-
-                /*
-                   viewholder.title = (TextView) convertView.findViewById(R.id.title);
-            viewholder.album = (TextView) convertView.findViewById(R.id.album);
-            viewholder.singer = (TextView) convertView.findViewById(R.id.singer);
-            viewholder.time = (TextView) convertView.findViewById(R.id.time);
-            viewholder.image = (ImageView) convertView.findViewById(R.id.image);//放图片
-                 */
             Music music = new Music(TITLE, DURATION, ARTIST, _ID, DISPLAY_NAME, DATA,
                     ALBUM_ID, ALBUM, SIZE, MIME_TYPE, YEAR);
             Log.d("test", "music---" + music.toString());
             formatMusicItem(music, musicList);
-            //   musicList.add(music,musicList);
         }
         mlist = musicList;
         return mlist;
@@ -766,13 +504,6 @@ public class Utils implements Serializable {
         }
     }
 
-//    //匹配时长 05:56 格式
-//    private static boolean isFormatDuration(String DURATION) {
-//        String regex = "[0-9]{2}:[0-9]{2}";
-//        Pattern pattern = Pattern.compile(regex);
-//        Matcher matcher = pattern.matcher(DURATION);
-//        return matcher.find();
-//    }
 
     private static String getMusicTime(String DURATION) {
         return formatTime(Long.parseLong(DURATION));
@@ -917,7 +648,7 @@ public class Utils implements Serializable {
                                     (MediaUtils.getPauseMusic() != null
                                             && MediaUtils.getPauseMusic().getDATA().equals(path))
                                     ) {
-                                ToastUtils.showToast(context, path + "当前文件已被占用...");
+                                ToastUtils.showToast(path + "当前文件已被占用...");
                                 Log.d("545delete", "当前音乐正在播放中,无法删除");
                                 dialog.cancel();
                                 return;
@@ -929,17 +660,15 @@ public class Utils implements Serializable {
                                 }
                                 deleteMusicSucessInter.deleteSucess();
                                 //删除成功,更新
-                                // mlist.remove(data);
-                                // musicAdapter.notifyDataSetChanged();
                                 Log.d("545delete", "删除成功---" + data);
-                                ToastUtils.showToast(context, path + "删除成功...");
+                                ToastUtils.showToast(path + "删除成功...");
 
 
                             } else {
-                                ToastUtils.showToast(context, path + "删除失败...");
+                                ToastUtils.showToast(path + "删除失败...");
                             }
                         } else {
-                            ToastUtils.showToast(context, path + "文件不存在...");
+                            ToastUtils.showToast(path + "文件不存在...");
                             //刷新
                             mlist.remove(data);
                             musicAdapter.notifyDataSetChanged();

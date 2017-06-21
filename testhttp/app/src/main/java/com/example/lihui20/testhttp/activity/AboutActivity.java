@@ -12,9 +12,5 @@ public class AboutActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
-        String text = getResources().getString(R.string.textstr);
-        TextView tv = (TextView) findViewById(R.id.tv);
-      //  tv.setText(text);
-
     }
 }

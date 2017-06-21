@@ -23,7 +23,6 @@ import java.util.List;
 public class CustomGridViewAdapter extends BaseAdapter {
     List list;
     Context context;
-   // CustomOnclick onclick;
 
     public CustomGridViewAdapter(Context context, List list) {
         this.list = list;
@@ -64,7 +63,6 @@ public class CustomGridViewAdapter extends BaseAdapter {
         viewholder.date.setText(data.getDate());
         viewholder.author_name.setText(data.getAuthor_name());
         ImageUtils.downloadImageFromURL(viewholder.thumbnail_pic_s, data.getThumbnail_pic_s());
-        //       viewholder.list_item.setOnLongClickListener(new CustomListener(data, onclick));
         viewholder.list_item.setOnLongClickListener(new CustomListener(data));
 
         return convertView;

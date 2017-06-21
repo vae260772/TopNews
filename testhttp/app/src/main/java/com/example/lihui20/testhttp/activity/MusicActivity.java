@@ -44,12 +44,11 @@ public class MusicActivity extends Activity {
     ListView listview;
     TextView empty;
     Context mContext;
-    Handler mHandler;
+    private static Handler mHandler;
     boolean isRefreshing = false;
     MusicAdapter musicAdapter;
     List<Music> musicList = new ArrayList<>();
     INotifyUpdate update;
-   /// LinearLayout favoritell;
     Cursor cursor = null;
 
     @Override
@@ -68,12 +67,12 @@ public class MusicActivity extends Activity {
                         Log.d("musicList", "65musicList---" + musicList);
                         musicAdapter.notifyDataSetChanged();
                         empty.setVisibility(GONE);
-                        ToastUtils.showToast(mContext, "已加载所有音乐文件...");
+                        ToastUtils.showToast("已加载所有音乐文件...");
                         updateLabel(thistopLoading, thisendLoading);
                         break;
                     case 1:
                         empty.setVisibility(VISIBLE);
-                        ToastUtils.showToast(mContext, "未查找到音乐文件...");
+                        ToastUtils.showToast("未查找到音乐文件...");
                         updateLabel(thistopLoading, thisendLoading);
                         break;
                     case 2:
@@ -83,10 +82,9 @@ public class MusicActivity extends Activity {
                         break;
                 }
                 isRefreshing = false;
-                //    listview.setEnabled(true);
                 music_listview.onRefreshComplete();
-                //  favoritell.setEnabled(true);
-                // music_listview.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+                music_listview.setMode(PullToRefreshBase.Mode.BOTH);
+
             }
         };
         update = new INotifyUpdate() {
@@ -104,24 +102,14 @@ public class MusicActivity extends Activity {
     }
 
     private void initView() {
-        mll=(LinearLayout)findViewById(R.id.mll);
+        mll = (LinearLayout) findViewById(R.id.mll);
         music_listview = (PullToRefreshListView) findViewById(R.id.music_listView);
-        music_listview.setScrollingWhileRefreshingEnabled(false);
+        music_listview.getLoadingLayoutProxy();
+        music_listview.setScrollingWhileRefreshingEnabled(true);
         listview = music_listview.getRefreshableView();
-   //     favoritell = (LinearLayout) findViewById(R.id.favoritell);
-        //   listview.setDividerHeight(0);
-        //    listview.setFadingEdgeLength(0);// 删除黑边（上下）
         listview.setVerticalScrollBarEnabled(false);
-        //      listview.setFastScrollEnabled(false);
-        // listview.setFocusable(true);// android:focusable="true"
         empty = (TextView) findViewById(R.id.empty_music);
-//        Animation alpha = AnimationUtils.loadAnimation(this,
-//                R.anim.alpha);
-//        alpha.setRepeatCount(Animation.INFINITE);
-//        alpha.setDuration(3000);
-//        alpha.setRepeatMode(Animation.REVERSE);
-//        empty.setAnimation(alpha);
-//        alpha.start();
+
         com.example.lihui20.testhttp.animation.AnimationUtils.alphaAnimation(empty);
         //加载系统音乐
         Cursor cursor = getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null,
@@ -137,8 +125,6 @@ public class MusicActivity extends Activity {
         int[] to
          */
             musicList = getAllMusic(cursor, new ArrayList<Music>());
-            //  listview.setAdapter(new SimpleAdapter(mContext, musicList, android.R.layout.simple_list_item_1,
-            //           new String[]{"display_name"}, new int[]{android.R.id.text1}));
 
         }
         musicAdapter = new MusicAdapter(mContext, musicList);
@@ -152,7 +138,6 @@ public class MusicActivity extends Activity {
         listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, final View view, final int i, final long l) {
-                // ToastUtils.showToast(mContext, "i---" + i + ",l---" + l);
                 view.setBackgroundColor(android.R.color.holo_red_dark);
                 final Utils.PlayMusicInter musicInter = new Utils.PlayMusicInter() {
                     @Override
@@ -222,11 +207,14 @@ public class MusicActivity extends Activity {
         music_listview.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                music_listview.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
                 doRefresh();
+
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                music_listview.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
                 doRefresh();
             }
         });
@@ -250,7 +238,6 @@ public class MusicActivity extends Activity {
 
     private void doRefresh() {
         if (!isRefreshing) {
-            //    music_listview.setMode(PullToRefreshBase.Mode.DISABLED);
             isRefreshing = true;//刷新中。。。
         } else {
             return;
@@ -268,49 +255,7 @@ public class MusicActivity extends Activity {
         refresh(musicList, cursor);
     }
 
-    //
     private void refresh(final List<Music> musicList, final Cursor cursor) {
-//        Thread thread=new Thread(){
-//            @Override
-//            public void run() {
-//                super.run();
-//                getAllMusic(cursor, musicList);
-//                Message msg = mHandler.obtainMessage();
-//                try {
-//                    Thread.sleep(3000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//                if (musicList.size() > 0 && musicList != null) {
-//                    msg.what = 0;
-//                } else {
-//                    msg.what = 1;
-//                }
-//                msg.obj = musicList;
-//                mHandler.sendMessage(msg);
-//            }
-//        };
-        //  thread.start();
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                Message msg = mHandler.obtainMessage();
-//                try {
-//                    Thread.sleep(3000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//                musicList.clear();
-//                getAllMusic(cursor, musicList);
-//                if (musicList.size() > 0 && musicList != null) {
-//                    msg.what = 0;
-//                } else {
-//                    msg.what = 1;
-//                }
-//                msg.obj = musicList;
-//                mHandler.sendMessage(msg);
-//            }
-//        }).start();
         music_listview.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -341,27 +286,15 @@ public class MusicActivity extends Activity {
         boolean state = MediaUtils.getPlayState();
         updateBgColor(getCurrentViewbgColor());
 
-        //  Music selectMusic = MediaUtils.getSelectMusic();
         if (pos == -1000 && state == false) {//首次打开
             return;
         }
-        //musicAdapter.setSelectedPosition(pos - 1);
 
         musicAdapter.notifyDataSetInvalidated();
-        //    musicAdapter.setSelectMusic(selectMusic);
-        // musicAdapter.setPlaying(state);
         listview.setSelection(pos + 1);
-        //   musicAdapter.notifyDataSetChanged();
-
     }
 
     private void updateBgColor(String viewbgcolor_key) {
-        /*
-                <item>white</item>
-        <item>gary</item>
-        <item>green</item>
-        <item>yellow</item>
-         */
         switch (viewbgcolor_key) {
             case "brown":
                 mll.setBackgroundResource(R.color.setbrown);
@@ -386,8 +319,6 @@ public class MusicActivity extends Activity {
     public void onStop() {
         super.onStop();
     }
-
-    //
 
 }
 

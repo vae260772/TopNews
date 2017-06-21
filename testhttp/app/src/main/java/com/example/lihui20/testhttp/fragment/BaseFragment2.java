@@ -24,7 +24,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.lihui20.testhttp.R;
-import com.example.lihui20.testhttp.activity.MainActivity;
 import com.example.lihui20.testhttp.adapter.CustomGridViewAdapter;
 import com.example.lihui20.testhttp.database.NewsCacheUtils;
 import com.example.lihui20.testhttp.interface2.IFragmentVisible;
@@ -42,44 +41,26 @@ import cn.bingoogolapple.bgabanner.BGABanner;
 
 
 public class BaseFragment2 extends Fragment {
-    boolean isFirstLoad = true;
-    PullToRefreshGridView pullToRefreshGridView;
-    GridView gridview;
-    CustomGridViewAdapter customGridViewAdapter;
-    TextView empty, title;
-    List resultList = new ArrayList<>();
-    boolean isFirstResume = true;
-    Handler mHandler;
+    private PullToRefreshGridView pullToRefreshGridView;
+    private CustomGridViewAdapter customGridViewAdapter;
+    private List resultList = new ArrayList<>();
+    private Handler mHandler = null;
+    private TextView empty;
+    private String typeFragment = "";
+    private String type;
+    //
+    private UpdateRunnable r = null;
     List<Data> mList;
+    GridView gridview;
     Bundle bundle;
     String old_updateTime;
-    UpdateRunnable r = null;
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    String type;
+    boolean isFirstResume = true;
+    boolean isFirstLoad = true;
+    TextView title;
     boolean isRefreshing = false;
     private BGABanner mBanner;
     SettingInterface settingInterface;
-    String TAG1 = "test65";
-    String typeFragment = "";
     boolean fragmentVisiable;
-
-    public boolean isDeleteOrAdd() {
-        return deleteOrAdd;
-    }
-
-    public void setDeleteOrAdd(boolean deleteOrAdd) {
-        this.deleteOrAdd = deleteOrAdd;
-    }
-
-    private boolean deleteOrAdd;
 
     public interface SettingInterface {
         void setOnSetClick(boolean show);
@@ -106,6 +87,7 @@ public class BaseFragment2 extends Fragment {
 
         bundle = getArguments();
         type = Utils.getKey(bundle.getString("type"));
+
         typeFragment = type;
         Log.d("BaseFragment531", "typeFragment---" + typeFragment + "," + "BaseFragment onCreate");
 
@@ -129,16 +111,14 @@ public class BaseFragment2 extends Fragment {
         title = (TextView) view.findViewById(R.id.title);
         title.setText(bundle.getString("type"));
         pullToRefreshGridView = (PullToRefreshGridView) view.findViewById(R.id.listView);
-        pullToRefreshGridView.setVerticalScrollBarEnabled(true);//
+        pullToRefreshGridView.setScrollingWhileRefreshingEnabled(true);
         //
         gridview = pullToRefreshGridView.getRefreshableView();
         gridview.setCacheColorHint(Color.WHITE);
-        gridview.setVerticalScrollBarEnabled(false);//
+        gridview.setVerticalScrollBarEnabled(false);
         gridview.setFadingEdgeLength(0);// 删除黑边（上下）
         //
         pullToRefreshGridView.setMode(PullToRefreshBase.Mode.BOTH);
-        // ILoadingLayout endLoading = pullToRefreshGridView.getLoadingLayoutProxy(false,
-        //          true);
         //头部
         ILoadingLayout topLoading = pullToRefreshGridView.getLoadingLayoutProxy(true,
                 false);
@@ -150,20 +130,21 @@ public class BaseFragment2 extends Fragment {
         endLoading.setRefreshingLabel("玩命加载中...");
         topLoading.setReleaseLabel("放开以刷新...");
         endLoading.setReleaseLabel("放开以刷新...");
-        //初始化
-//        String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(),
-//                DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
-//        // Update the LastUpdatedLabel
-        //    pullToRefreshGridView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
-
-        pullToRefreshGridView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<GridView>() {
+        pullToRefreshGridView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
             @Override
-            public void onRefresh(PullToRefreshBase<GridView> refreshView) {
-//                String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(),
-//                        DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
-//                // Update the LastUpdatedLabel
-//                refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
-//                // Do work to refresh the list here.
+            public void onPullDownToRefresh(PullToRefreshBase<GridView> refreshGridView) {
+                pullToRefreshGridView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+                doRefresh();
+
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<GridView> refreshGridView) {
+                pullToRefreshGridView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
+                doRefresh();
+            }
+
+            private void doRefresh() {
                 Log.d("lihui", "102 isRefreshing---" + isRefreshing);
                 if (!isRefreshing) {
                     isRefreshing = true;
@@ -202,16 +183,15 @@ public class BaseFragment2 extends Fragment {
                         .into(itemView);
             }
         });
-        //
         return view;
     }
 
     private List<Data> getResult() {
-        resultList = Utils.getResult(getActivity(), type,
-                pullToRefreshGridView, resultList, empty, mHandler);
+        Log.d("BaseFragment", "typeFragment---" + typeFragment);
+        resultList = Utils.getResult(typeFragment,
+                pullToRefreshGridView, empty,resultList, mHandler);
         //getResult异步的
         Log.d("BaseFragment", "pullRefresh resultList---" + resultList);
-
         return resultList;
     }
 
@@ -246,43 +226,36 @@ public class BaseFragment2 extends Fragment {
                 if (msg.obj != null) {
                     switch (msg.what) {
                         case 0:
+                            //成功返回
                             mList = (List<Data>) msg.obj;
-                            customGridViewAdapter.notifyDataSetChanged();
-                            loadBannerData(mList);
-                            pullToRefreshGridView.onRefreshComplete();
-                            isRefreshing = false;
+                            if (mList != null && mList.size() > 0) {
+                                empty.setVisibility(View.GONE);
+                                customGridViewAdapter.notifyDataSetChanged();
+                                loadBannerData(mList);
+                            }
                             settingInterface.setOnSetClick(false);
-                            //    ((MainActivity) getActivity()).isShowSetting(false);
-
                             break;
                         case 1:
-                            // Throwable t = (Throwable) msg.obj;
+                            //没有网络，加载缓存
                             String type = (String) msg.obj;
                             Log.d("lihui", "184 type---" + type);
-                            //  if (t instanceof UnknownHostException) {
                             //加载缓存
                             List list = NewsCacheUtils.getInstance(getActivity()).queryAllByType(type);
                             if (list != null && list.size() > 0) {
+                                empty.setVisibility(View.GONE);
                                 Log.d("cache", "list---" + list);
                                 Utils.resetList(resultList, list);//返回 handler，更新adapter
                                 customGridViewAdapter.notifyDataSetChanged();
                                 loadBannerData(resultList);
-                                empty.setVisibility(View.GONE);
                             }
-                            //    settingInterface.setOnSetClick(true);
-                            if (getActivity() != null) {
-                                ((MainActivity) getActivity()).isShowSetting(true);
-                            }
-                            //      ToastUtils.showToast(getActivity(), "网络异常，请稍后重试");
-                            //   }
-                            pullToRefreshGridView.onRefreshComplete();
-                            isRefreshing = false;
+                            settingInterface.setOnSetClick(true);
                             break;
                         default:
-                            pullToRefreshGridView.onRefreshComplete();
-                            isRefreshing = false;
                             break;
                     }
+                    pullToRefreshGridView.onRefreshComplete();
+                    isRefreshing = false;
+                    pullToRefreshGridView.setMode(PullToRefreshBase.Mode.BOTH);
                 }
             }
         };
@@ -291,8 +264,6 @@ public class BaseFragment2 extends Fragment {
         //针对第一页
         if (isFirstResume) {
             if (fragmentVisiable) {
-                //   if (iFragmentVisible != null) {
-                //  iFragmentVisible.onFragmentVisible(true);
                 List list = getResult();
                 Log.d("BaseFragment", "111 isFirstResume list---" + list);
                 isFirstResume = false;
@@ -320,7 +291,7 @@ public class BaseFragment2 extends Fragment {
         if (openUpdate()) {//打开开关
             if (!TextUtils.isEmpty(old_updateTime)
                     && !old_updateTime.equals(getUpdateTime())) {
-                Log.d("update66","fragment---"+type+",开启自动更新"+",每过"+getUpdateTime()+"s进行更新...");
+                Log.d("update66", "fragment---" + type + ",开启自动更新" + ",每过" + getUpdateTime() + "s进行更新...");
                 Log.d("update66", "1old_updateTime---" + old_updateTime);
                 old_updateTime = getUpdateTime();//修改时间
                 Log.d("update66", "2old_updateTime---" + old_updateTime);
@@ -350,8 +321,7 @@ public class BaseFragment2 extends Fragment {
         @Override
         public void run() {
             // TODO Auto-generated method stub
-            //要做的事情，这里再次调用此Runnable对象，以实现每两秒实现一次的定时器操作
-            //
+            //要做的事情，这里再次调用此Runnable对象，以实现每xxx秒（转换ms）实现一次的定时器操作
             List list = getResult();
             Log.d("update66", "getResult()---" + list.toString());
             customGridViewAdapter.notifyDataSetChanged();
@@ -363,14 +333,14 @@ public class BaseFragment2 extends Fragment {
     private boolean openUpdate() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
         boolean update_key = settings.getBoolean(getString(R.string.update_key), false);//默认关闭
-        Log.d("update66","openUpdate() update_key---"+update_key);
+        Log.d("update66", "openUpdate() update_key---" + update_key);
         return update_key;//false  true
     }
 
     private String getUpdateTime() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String updatetime = settings.getString(getString(R.string.auto_update_frequency_key), "0");
-        Log.d("update66","getUpdateTime() updatetime---"+updatetime);
+        Log.d("update66", "getUpdateTime() updatetime---" + updatetime);
         return updatetime;
     }
 
@@ -384,8 +354,8 @@ public class BaseFragment2 extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        Log.d("update66","setUserVisibleHint type---"+type);
-        Log.d("update66","setUserVisibleHint isVisibleToUser---"+isVisibleToUser);
+        Log.d("update66", "setUserVisibleHint type---" + type);
+        Log.d("update66", "setUserVisibleHint isVisibleToUser---" + isVisibleToUser);
 
         //界面可见
         if (isVisibleToUser) {
@@ -405,7 +375,6 @@ public class BaseFragment2 extends Fragment {
         //绑定适配器
         gridview.setAdapter(customGridViewAdapter);
         //间距
-        //  gridview.addItemDecoration(new SpacesItemDecoration((int) Utils.dip2px(8)));
         Log.d("Utils", "empty.setVisibility(View.GONE)");
         isFirstLoad = false;
         Log.d("Utils", "BaseFragment.isFirstLoad = false");
@@ -430,6 +399,7 @@ public class BaseFragment2 extends Fragment {
         super.onDestroyView();
         if (r != null) {
             mHandler.removeCallbacks(r);
+            mHandler = null;
         }
         //
         Log.d("BaseFragment531", "typeFragment---" + typeFragment + "," + "BaseFragment onDestroyView");
@@ -492,11 +462,6 @@ public class BaseFragment2 extends Fragment {
             mBanner.setOnItemClickListener(new BGABanner.OnItemClickListener() {
                 @Override
                 public void onBannerItemClick(BGABanner banner, View view, Object model, int position) {
-//                    Intent intent = new Intent();
-//                    intent.setAction("android.intent.action.VIEW");
-//                    Uri content_url = Uri.parse(list.get(position).getUrl());
-//                    intent.setData(content_url);
-//                    startActivity(intent);
                     String url = list.get(position).getUrl();
                     Utils.openURL(getContext(), url);
 

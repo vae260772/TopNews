@@ -37,7 +37,7 @@ public class DBUtils {
     public void insert(Data data) {
         //查询是否收藏过了
         if (queryOne(data)) {
-            ToastUtils.showToast(mContext, "新闻已收藏...");
+            ToastUtils.showToast( "新闻已收藏...");
             return;
         }
         SQLiteDatabase database = helper.getWritableDatabase();
@@ -51,7 +51,7 @@ public class DBUtils {
 
         long rowid = database.insert(CustomSqliteOpenHelper.DATABASE_TABLE, "_id", values);
         if (rowid > 0) {
-            ToastUtils.showToast(mContext, "收藏成功...");
+            ToastUtils.showToast( "收藏成功...");
         }
     }
 
@@ -60,7 +60,7 @@ public class DBUtils {
         SQLiteDatabase database = helper.getWritableDatabase();
         int row = database.delete(CustomSqliteOpenHelper.DATABASE_TABLE, "title=?", new String[]{data.getTitle()});
         if (row == 1) {
-            ToastUtils.showToast(mContext, "取消成功...");
+            ToastUtils.showToast( "取消成功...");
         }
     }
 

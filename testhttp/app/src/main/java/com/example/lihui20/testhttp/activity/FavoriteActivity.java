@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FavoriteActivity extends Activity {
+    private static Handler mHandler;
     PullToRefreshListView favorite_listview;
     ListView listview;
     TextView empty;
@@ -45,7 +46,6 @@ public class FavoriteActivity extends Activity {
     List<Data> more4list;
     List currentlist = null;
     List listBeforeQuery = new ArrayList();
-    Handler mHandler;
     List<Data> keyList;
     LinearLayout favoritell;
     boolean isRefreshing = false;
@@ -53,7 +53,6 @@ public class FavoriteActivity extends Activity {
     private android.app.ActionBar mActionBar;
     private SearchView searchView;
     private MenuItem searchItem;
-    // private boolean isSearch = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,11 +68,11 @@ public class FavoriteActivity extends Activity {
                 Log.d("lihui", "FavoriteActivity handleMessage()");
                 switch (msg.what) {
                     case 0:
-                        ToastUtils.showToast(mContext, "未收藏过新闻哦亲...");
+                        ToastUtils.showToast("未收藏过新闻哦亲...");
 
                         break;
                     case 1:
-                        ToastUtils.showToast(mContext, "没有更多的收藏了亲...");
+                        ToastUtils.showToast("没有更多的收藏了亲...");
 
                         break;
                     case 2:
@@ -81,9 +80,9 @@ public class FavoriteActivity extends Activity {
                         List list = DBUtils.getInstance(mContext).queryAll();
                         Log.d("lihui", "queryAllList.toString()---" + queryAllList.toString());
                         if (currentlist != null && (currentlist.size() == list.size())) {
-                            ToastUtils.showToast(mContext, "已加载所有收藏的新闻...");
+                            ToastUtils.showToast("已加载所有收藏的新闻...");
                         } else {
-                            ToastUtils.showToast(mContext, "已添加一条收藏的新闻...");
+                            ToastUtils.showToast("已添加一条收藏的新闻...");
                         }
                         break;
 
@@ -91,11 +90,9 @@ public class FavoriteActivity extends Activity {
                         break;
                 }
                 isRefreshing = false;
-                //    searchItem.setVisible(true);
                 favorite_listview.onRefreshComplete();
-                //   favorite_listview.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
-                //     listview.setEnabled(true);
-                //    favorite_listview.setEnabled(true);
+                favorite_listview.setMode(PullToRefreshBase.Mode.BOTH);
+
             }
         };
         initView();
@@ -103,17 +100,14 @@ public class FavoriteActivity extends Activity {
 
     private void initView() {
         favorite_listview = (PullToRefreshListView) findViewById(R.id.favorite_listView);
-        favorite_listview.setScrollingWhileRefreshingEnabled(false);
+        favorite_listview.setScrollingWhileRefreshingEnabled(true);
         //刷新分页
         favorite_listview.setMode(PullToRefreshBase.Mode.BOTH);
         listview = favorite_listview.getRefreshableView();
 
         Log.d("FavoriteActivity", "FavoriteActivity---listview---");
-        //listview.setVerticalScrollBarEnabled(false);
-        //listview.setDividerHeight(0);
         listview.setVerticalScrollBarEnabled(false);
 
-        //
         favoritell = (LinearLayout) findViewById(R.id.favoritell);
 
         favorite_listview.setOnClickListener(new View.OnClickListener() {
@@ -142,11 +136,15 @@ public class FavoriteActivity extends Activity {
                 if (!mActionBar.isShowing()) {
                     mActionBar.show();
                 }
+                //截止上拉
+                favorite_listview.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
                 doRefresh();
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                favorite_listview.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
+
                 doRefresh();
             }
         });
@@ -199,15 +197,12 @@ public class FavoriteActivity extends Activity {
 
     private void doRefresh() {
         if (!isRefreshing) {
-            //    favorite_listview.setMode(PullToRefreshBase.Mode.DISABLED);
-            //listview.setEnabled(false);
-            //     favorite_listview.setEnabled(false);
+
             isRefreshing = true;
         } else {
             return;
         }
         //刷新中
-        // searchItem.setVisible(false);
         //没有收藏
         List favotiteList = DBUtils.getInstance(mContext).queryAll();
         if (favotiteList.size() == 0) {
@@ -282,7 +277,7 @@ public class FavoriteActivity extends Activity {
 
 
         if (searchView == null) {
-            ToastUtils.showToast(this, "searchView is null");
+            ToastUtils.showToast("searchView is null");
             return true;
         }
         // 当SearchView获得焦点时弹出软键盘的类型，就是设置输入类型
@@ -298,8 +293,6 @@ public class FavoriteActivity extends Activity {
                 Log.d("FavoriteActivity", "less4list---" + less4list);
                 Log.d("FavoriteActivity", "listBeforeQuery---" + listBeforeQuery);
                 favorite_listview.setMode(PullToRefreshBase.Mode.BOTH);
-                //isSearch = false;//
-
                 //关闭搜索，还原到原来的列表数据
                 if (listBeforeQuery != null && listBeforeQuery.size() > 0) {
                     Log.d("FavoriteActivity", "onMenuItemActionCollapse list.size()---" + queryAllList.size());
@@ -328,7 +321,6 @@ public class FavoriteActivity extends Activity {
                 if (TextUtils.isEmpty(newText) || isRefreshing) {
                     return true;
                 }
-                //isSearch = true;//
                 if (listBeforeQuery != null && listBeforeQuery.size() > 0) {
                     if (pageNumber > 4) {
                         Utils.resetList(more4list, listBeforeQuery);
@@ -337,7 +329,6 @@ public class FavoriteActivity extends Activity {
                     }
                 }
                 Log.d("FavoriteActivity", "newText---" + newText);
-                //oldNewsList = list;
                 //禁止刷新
                 favorite_listview.setMode(PullToRefreshBase.Mode.DISABLED);
                 keyList = DBUtils.getInstance(mContext).queryBykey(newText);
@@ -354,30 +345,16 @@ public class FavoriteActivity extends Activity {
                     Log.d("FavoriteActivity", "221 listBeforeQuery---" + listBeforeQuery);
 
                     //当前显示的列表中查询是否有包含关键字的 item
-                    // List list = Utils.getKeyValueList(more4list, keyList);
                     Utils.resetListUpdate(more4list, keyList, newsAdapter);
-                    //newsAdapter.notifyDataSetChanged();
-                    //Utils.resetList( more4list,listBeforeQuery);
 
                 } else {
                     Utils.resetList(listBeforeQuery, less4list);
                     Log.d("FavoriteActivity", "226 listBeforeQuery---" + listBeforeQuery);
-
-                    //List list = Utils.getKeyValueList(less4list, keyList);
                     Utils.resetListUpdate(less4list, keyList, newsAdapter);
-                    // Utils.resetList(less4list, listBeforeQuery);
                 }
                 return true;
             }
         });
-//        searchItem.setEnabled(false) ;
-//        searchView.setSubmitButtonEnabled(false);
-//        searchItem.setCheckable(false);
-//        searchView.setEnabled(false);
-//        searchView.setClickable(false);
-        //  searchView.setVisibility(View.GONE);
-
-        //
         //hideMenu
         MenuItem hideMenu = menu.findItem(R.id.action_hide);
         hideMenu.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
@@ -413,16 +390,10 @@ public class FavoriteActivity extends Activity {
         if (TextUtils.isEmpty(getCurrentViewbgColor())) {
             return;
         }
-       updateBgColor(getCurrentViewbgColor());
+        updateBgColor(getCurrentViewbgColor());
     }
 
     private void updateBgColor(String viewbgcolor_key) {
-        /*
-                <item>white</item>
-        <item>gary</item>
-        <item>green</item>
-        <item>yellow</item>
-         */
         switch (viewbgcolor_key) {
             case "brown":
                 favoritell.setBackgroundResource(R.color.setbrown);

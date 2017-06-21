@@ -138,7 +138,7 @@ public class PlayerService extends Service {
                 Intent endintent = new Intent("com.example.lihui20.testhttp.MusicBroadcastReceiver");
                 endintent.putExtra("state", true);//播放完发广播
                 sendBroadcast(endintent);//发广播
-                ToastUtils.showToast(getBaseContext(), "已播放至最后一首歌...");
+                ToastUtils.showToast( "已播放至最后一首歌...");
                 return;
             }
             return;

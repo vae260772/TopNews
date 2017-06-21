@@ -107,20 +107,4 @@ public class MusicAdapter extends BaseAdapter {
 
     }
 
-    //
-    public class CustomListener implements View.OnLongClickListener {
-        Data data;
-        CustomOnclick onclick;
-        public CustomListener(Data data, CustomOnclick onclick) {
-            this.data = data;
-            this.onclick = onclick;
-        }
-
-        @Override
-        public boolean onLongClick(View v) {
-            Utils.showOperateDialog(context, data, onclick);
-            return false;
-        }
-    }
-
 }

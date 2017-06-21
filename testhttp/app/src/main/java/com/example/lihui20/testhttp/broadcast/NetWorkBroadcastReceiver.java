@@ -5,12 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.wifi.WifiManager;
 import android.util.Log;
 
 import com.example.lihui20.testhttp.activity.MainActivity;
 import com.example.lihui20.testhttp.tools.NetWorkUtils;
-import com.example.lihui20.testhttp.tools.ToastUtils;
 
 /**
  * Created by lihui20 on 2017/4/24.
@@ -104,13 +102,10 @@ public class NetWorkBroadcastReceiver extends BroadcastReceiver {
                     + activeNetwork.getDetailedState().name());
             Log.d(TAG1, "getDetailedState()" + activeNetwork.getExtraInfo());
             Log.d(TAG1, "getType()" + activeNetwork.getType());
-            ToastUtils.showToast(mContext, "ok");
         } else {
             NetWorkUtils.setOpen(false);
             Log.d(TAG1, "当前没有网络连接，请确保你已经打开网络 ");
             ((MainActivity) mContext).isShowSetting(true);
-            ToastUtils.showToast(mContext, "nono");
-
         }
 
 

@@ -27,9 +27,7 @@ import cn.smssdk.gui.RegisterPage;
 public class LoginActivity extends Activity {
 
 
-    public Handler mSuccessHandler;
-    // UI references.
-
+    private static Handler mSuccessHandler;
     TextView tv;
     Button register;
     Context mContext;
@@ -80,27 +78,6 @@ public class LoginActivity extends Activity {
 
 
         mContext = this;
-
-//        mPasswordView = (EditText) findViewById(R.id.password);
-//        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-//                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-//                    //    attemptLogin();
-//                    return true;
-//                }
-//                return false;
-//            }
-//        });
-//
-//        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-//        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //    attemptLogin();
-//            }
-//        });
-
     }
 
     public void initViews(int resId) {
@@ -179,7 +156,7 @@ public class LoginActivity extends Activity {
     }
 
 
-    public class CustomEventHandler extends EventHandler {
+    public static class CustomEventHandler extends EventHandler {
 
         @Override
         public void beforeEvent(int i, Object o) {
@@ -208,57 +185,6 @@ public class LoginActivity extends Activity {
             //TODO: Replace this with your own logic
             return password.length() > 4;
         }
-
-
-        /**
-         * Represents an asynchronous login/registration task used to authenticate
-         * the user.
-         */
-//        public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-//
-//            private final String mEmail;
-//            private final String mPassword;
-//
-//            UserLoginTask(String email, String password) {
-//                mEmail = email;
-//                mPassword = password;
-//            }
-//
-//            @Override
-//            protected Boolean doInBackground(Void... params) {
-//                // TODO: attempt authentication against a network service.
-//
-//                try {
-//                    // Simulate network access.
-//                    Thread.sleep(2000);
-//                } catch (InterruptedException e) {
-//                    return false;
-//                }
-//
-//
-//                // TODO: register the new account here.
-//                return true;
-//            }
-//
-//            @Override
-//            protected void onPostExecute(final Boolean success) {
-//                mAuthTask = null;
-//                //showProgress(false);
-//
-//                if (success) {
-//                    finish();
-//                } else {
-//                    mPasswordView.setError(getString(R.string.error_incorrect_password));
-//                    mPasswordView.requestFocus();
-//                }
-//            }
-//
-//            @Override
-//            protected void onCancelled() {
-//                mAuthTask = null;
-//                // showProgress(false);
-//            }
-//        }
     }
 
     @Override
@@ -266,36 +192,6 @@ public class LoginActivity extends Activity {
         super.onResume();
         if (TextUtils.isEmpty(getCurrentViewbgColor())) {
             return;
-        }
-   //   updateBgColor(getCurrentViewbgColor());
-    }
-
-    private void updateBgColor(String viewbgcolor_key) {
-        /*
-                <item>white</item>
-        <item>gary</item>
-        <item>green</item>
-        <item>yellow</item>
-         */
-        switch (viewbgcolor_key) {
-            case "brown":
-                if (loginlinearLayout1 != null) {
-                    loginlinearLayout1.setBackgroundResource(R.color.setbrown);
-                }
-                if (loginlinearLayout2 != null) {
-                    loginlinearLayout2.setBackgroundResource(R.color.setbrown);
-                }
-                break;
-            case "black":
-                if (loginlinearLayout1 != null) {
-
-                    loginlinearLayout1.setBackgroundResource(android.R.color.black);
-                }
-                if (loginlinearLayout2 != null) {
-
-                    loginlinearLayout2.setBackgroundResource(R.color.setbrown);
-                }
-                break;
         }
     }
 

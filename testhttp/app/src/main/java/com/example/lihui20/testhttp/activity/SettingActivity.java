@@ -19,10 +19,6 @@ public class SettingActivity extends PreferenceActivity
     ListPreference lististPreference = null;
     ListPreference bglististPreference = null;
 
-    // CheckBoxPreference isneilflag_CheckBoxPreference = null;
-    // EditTextPreference usernameEditTextPreference = null;
-    //  EditTextPreference passwordEditTextPreference = null;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,10 +33,6 @@ public class SettingActivity extends PreferenceActivity
         //
         bglististPreference = (ListPreference) findPreference(getString(R.string.viewbgcolor_key));
 
-        //
-        // isneilflag_CheckBoxPreference = (CheckBoxPreference) findPreference(getString(R.string.isneilflag_key));
-        // usernameEditTextPreference = (EditTextPreference) findPreference(getString(R.string.username_key));
-        //  passwordEditTextPreference = (EditTextPreference) findPreference(getString(R.string.password_key));
         //为Preference注册监听
         updateCheckBoxPreference.setOnPreferenceChangeListener(this);
         updateCheckBoxPreference.setOnPreferenceClickListener(this);
@@ -50,12 +42,6 @@ public class SettingActivity extends PreferenceActivity
 
         bglististPreference.setOnPreferenceClickListener(this);//点击
         bglististPreference.setOnPreferenceChangeListener(this);//修改列表选项
-/////其他
-        //  isneilflag_CheckBoxPreference.setOnPreferenceChangeListener(this);
-        //  isneilflag_CheckBoxPreference.setOnPreferenceClickListener(this);
-
-        //  usernameEditTextPreference.setOnPreferenceChangeListener(this);
-        //  passwordEditTextPreference.setOnPreferenceChangeListener(this);
     }
 
     @Override
@@ -94,8 +80,6 @@ public class SettingActivity extends PreferenceActivity
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
             String viewbgcolor_key = settings.getString(getString(R.string.viewbgcolor_key), "");
             Log.d(TAG, "viewbgcolor_key---" + viewbgcolor_key);
-            //    setTheme(R.style.SettingTheme);
-
         }
         //返回true表示允许改变
         return true;

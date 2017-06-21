@@ -11,7 +11,6 @@ import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
@@ -38,17 +37,13 @@ import com.example.lihui20.testhttp.tools.NetWorkUtils;
 import com.example.lihui20.testhttp.tools.ToastUtils;
 import com.example.lihui20.testhttp.tools.Utils;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.viewpagerindicator.TabPageIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.smssdk.SMSSDK;
-
 public class MainActivity extends FragmentActivity {
-    private final String TAG = "MainActivity";
+    private final static String TAG = "MainActivity";
     FragmentManager fm;
     SlidingMenu menu;
     Context mContext;
@@ -59,13 +54,11 @@ public class MainActivity extends FragmentActivity {
     List<String> selectAddTypeList;
     List<String> selectRemoveTypeList;
     private final int ALLPAGE = 9;
-    //
     private TypesDBUtils instance;
-    TextView set;
+    private static TextView set;
     CustomeNetBroadcastReceiver receiver;
     LinearLayout mainll;
     String old_viewbgcolor_key;
-    Handler mhandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,24 +73,18 @@ public class MainActivity extends FragmentActivity {
         registerReceiver(receiver, filter);
         Log.d(TAG, "getActionBar()---" + getActionBar());
         android.app.ActionBar actionBar = getActionBar();
-        ActionBarUtil.showCustomActionBar(actionBar, false, true, false);
+        ActionBarUtil.showCustomActionBar(actionBar, false, true, false, true);
         initViews();
-        ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this));
-        SMSSDK.initSDK(this, "1bc697ea4141c", "6733d8701dcd74df18cd836d710a9e73");
         Log.d("lihui", "MainActivity onCreate");
         initSlidingMenu();
-        //
-        mhandler = new Handler();
     }
 
-    public class CustomeNetBroadcastReceiver extends BroadcastReceiver {
+    public static class CustomeNetBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             ConnectivityManager manager = (ConnectivityManager) context
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
             Log.d(TAG, "CONNECTIVITY_ACTION---" + intent.getAction());
-            //
-
 //   打开、关闭数据连接或者断开和连接或者断开某一个wifi网络连接
             if (intent.getAction().equals("android.net.conn.CONNECTIVITY_CHANGE")) {
                 NetworkInfo activeNetwork = manager.getActiveNetworkInfo();
@@ -110,12 +97,10 @@ public class MainActivity extends FragmentActivity {
                             + activeNetwork.getDetailedState().name());
                     Log.d(TAG, "getDetailedState()" + activeNetwork.getExtraInfo());
                     Log.d(TAG, "getType()" + activeNetwork.getType());
-                    //   ToastUtils.showToast(mContext, "ok");
                 } else {
                     NetWorkUtils.setOpen(false);
                     Log.d(TAG, "当前没有网络连接，请确保你已经打开网络 ");
                     isShowSetting(true);
-                    //    ToastUtils.showToast(mContext, "nono");
                 }
             }
         }
@@ -150,7 +135,7 @@ public class MainActivity extends FragmentActivity {
                 startActivity(intent);
             }
         });
-        //
+
         (menu.findViewById(R.id.favorite)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,7 +146,7 @@ public class MainActivity extends FragmentActivity {
 
             }
         });
-//
+
         (menu.findViewById(R.id.music)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,7 +155,7 @@ public class MainActivity extends FragmentActivity {
 
             }
         });
-        //
+
         (menu.findViewById(R.id.login)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -193,10 +178,7 @@ public class MainActivity extends FragmentActivity {
         fm = getSupportFragmentManager();
         titleList = new ArrayList<>();
         old_viewbgcolor_key = getCurrentViewbgColor();
-        //
         mainll = (LinearLayout) findViewById(R.id.mainll);
-
-        //
         set = (TextView) findViewById(R.id.set);
         set.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -215,22 +197,8 @@ public class MainActivity extends FragmentActivity {
 
         mPager.setAdapter(mAdapter);
         mPager.setOffscreenPageLimit(ALLPAGE);
-        //    mPager.setOffscreenPageLimit(20);
         mIndicator = (TabPageIndicator) findViewById(R.id.indicator);
         mIndicator.setViewPager(mPager);
-//        mIndicator.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-//            @Override
-//            public void onScrollChange(View view, int i, int i1, int i2, int i3) {
-//                ToastUtils.showToast(mContext, "setOnScrollChangeListener");
-//
-//            }
-//        });
-//        mIndicator.getRootView().setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                ToastUtils.showToast(mContext, "setOnClickListener");
-//            }
-//        });
     }
 
     @Override
@@ -243,24 +211,15 @@ public class MainActivity extends FragmentActivity {
         super.onResume();
 
 
-
         //需要更新背景
         if (TextUtils.isEmpty(getCurrentViewbgColor())) {
             return;
         }
         Log.d("main", "getCurrentViewbgColor()---" + getCurrentViewbgColor());
-        //    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        //    String viewbgcolor_key = settings.getString(getString(R.string.viewbgcolor_key), "");
         updateBgColor(getCurrentViewbgColor());
     }
 
     private void updateBgColor(String viewbgcolor_key) {
-        /*
-                <item>white</item>
-        <item>gary</item>
-        <item>green</item>
-        <item>yellow</item>
-         */
         switch (viewbgcolor_key) {
 
             case "black":
@@ -274,8 +233,6 @@ public class MainActivity extends FragmentActivity {
                 break;
         }
     }
-
-
 
     private String getCurrentViewbgColor() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
@@ -316,7 +273,7 @@ public class MainActivity extends FragmentActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 Log.d("2lihui", "add---" + mAdapter.getCount());
                 if (mAdapter.getCount() == Utils.MAX_PAGE) {
-                    ToastUtils.showToast(mContext, "sorry,暂无分类可以添加了亲...");
+                    ToastUtils.showToast("sorry,暂无分类可以添加了亲...");
                     return true;
                 }
                 selectAddTypeList = new ArrayList();//新的对象
@@ -339,9 +296,6 @@ public class MainActivity extends FragmentActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Log.d("lihui", "selectAddTypeList---" + selectAddTypeList);
-//                        if (selectAddTypeList != null && selectAddTypeList.size() > 0 && nonetypeLL.getVisibility() == View.VISIBLE) {
-//                            nonetypeLL.setVisibility(View.GONE);
-//                        }
                         mAdapter.addTypeList(selectAddTypeList);
                         instance.insertTypesList(selectAddTypeList);
                         mIndicator.notifyDataSetChanged();
@@ -349,7 +303,6 @@ public class MainActivity extends FragmentActivity {
                         //处于最后一页
                         mPager.setCurrentItem(mAdapter.getCount() - 1);
                         Log.d("lihui", "mAdapter.getCount()-1---" + (mAdapter.getCount() - 1));
-                        //     mPager.setOffscreenPageLimit(mAdapter.getCount() - 1);
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
@@ -367,7 +320,7 @@ public class MainActivity extends FragmentActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 Log.d("2lihui", "remove---" + mAdapter.getCount());
                 if (mAdapter.getCount() == Utils.MIN_PAGE) {
-                    ToastUtils.showToast(mContext, "当前是最后一页了亲，请手下留情...");
+                    ToastUtils.showToast("当前是最后一页了亲，请手下留情...");
                     return true;
                 }
                 selectRemoveTypeList = new ArrayList();//新的对象
@@ -400,7 +353,6 @@ public class MainActivity extends FragmentActivity {
                         int newPos = Utils.getPosition(mAdapter.getTypeList(), currentTitle);//移除前面一个，会调转到下一个页面的bug
                         Log.d("newPos", "newPos---" + newPos);
                         mPager.setCurrentItem(newPos);
-                        //     mPager.setOffscreenPageLimit(mAdapter.getCount() - 1);
                         Log.d("lihui", "mAdapter.getTypeList()---" + mAdapter.getTypeList());
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -417,7 +369,7 @@ public class MainActivity extends FragmentActivity {
         return true;
     }
 
-    private Fragment createFragmentByType(String type) {
+    private static Fragment createFragmentByType(String type) {
         BaseFragment2 bf = (BaseFragment2) FragmentFactory.newInstance(type);
         bf.setOnSetClickListener(new BaseFragment2.SettingInterface() {
             @Override
@@ -428,16 +380,16 @@ public class MainActivity extends FragmentActivity {
         return bf;
     }
 
-    public void showSetting(boolean show) {
+    public static void showSetting(boolean show) {
         if (show) {
             set.setVisibility(View.VISIBLE);
-            ToastUtils.showToast(this, "网络异常，请稍后重试");
+            ToastUtils.showToast("网络异常，请稍后重试");
         } else {
             set.setVisibility(View.GONE);
         }
     }
 
-    public class CustomAdapter extends FragmentStatePagerAdapter {
+    public static class CustomAdapter extends FragmentStatePagerAdapter {
         List<String> fragmentTitlesList;
 
         CustomAdapter(FragmentManager fm) {
@@ -472,10 +424,6 @@ public class MainActivity extends FragmentActivity {
         @Override
         public int getItemPosition(Object object) {
             Log.d("lihui1555", "getItemPosition object---" + object);
-//            BaseFragment2 object2=(BaseFragment2)object;
-//            if(object2.getType().equals("top")){
-            //    return POSITION_UNCHANGED;
-//            }
             return POSITION_NONE;
         }
 
@@ -501,10 +449,7 @@ public class MainActivity extends FragmentActivity {
         public void destroyItem(ViewGroup container, int position, Object object) {
             //
             Log.d("lihui1555", "destroyItem position---" + position);
-            //   if (position == 0) {
             super.destroyItem(container, position, object);
-            //  }
-
             Log.d("lihui1555", "destroyItem object---" + object);
 
         }
@@ -512,17 +457,11 @@ public class MainActivity extends FragmentActivity {
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             Log.d("lihui1555", "instantiateItem object---" + position);
-            //  if (position != 0) {
             return super.instantiateItem(container, position);
-            // }
-            // return  null;
-
         }
     }
 
-    public void isShowSetting(boolean show) {
+    public static void isShowSetting(boolean show) {
         showSetting(show);
     }
-
-
 }
